@@ -57,9 +57,9 @@ class EnemyController:
 
         for enemy in self.enemy_list:
             if self.direction == self.RIGHT:
-                enemy.x += 10
+                enemy.x += 50
             else:
-                enemy.x -= 10
+                enemy.x -= 50
 
         for enemy in self.enemy_list:
 

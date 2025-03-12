@@ -6,8 +6,8 @@ from Enemy import ClassicEnemy, EnemyController
 from GroundEntity import Ground
 from utils import collides
 
-w = 1280
-h = 720
+w = 1920
+h = 1080
 
 fps = 110
 
