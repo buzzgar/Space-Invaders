@@ -1,7 +1,7 @@
 import picture
 import stddraw
 
-from utils import GameObject
+from utils.utils import GameObject
 
 
 class ClassicEnemy(GameObject):
@@ -20,17 +20,17 @@ class EnemyController:
     RIGHT = 0
     LEFT = 1
 
-    def __init__(self, w, h, enemy_count=64):
+    def __init__(self, w, h, enemy_count=32):
         self.w = w
         self.h = h
 
-        self.max_per_row = 16
+        self.max_per_row = 8
 
         self.enemy_height = 50
 
         self.direction = self.RIGHT
 
-        p = picture.Picture("resources/pngegg.png")
+        p = picture.Picture("assets/tie-fighter.png")
 
         a_ratio = p.width() / p.height()
         self.enemy_width = self.enemy_height * a_ratio
@@ -57,9 +57,9 @@ class EnemyController:
 
         for enemy in self.enemy_list:
             if self.direction == self.RIGHT:
-                enemy.x += 50
+                enemy.x += 10
             else:
-                enemy.x -= 50
+                enemy.x -= 10
 
         for enemy in self.enemy_list:
 

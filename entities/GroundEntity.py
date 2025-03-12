@@ -1,6 +1,6 @@
 import stddraw
 
-from utils import GameObject
+from utils.utils import GameObject
 
 
 class Ground(GameObject):
