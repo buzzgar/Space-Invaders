@@ -5,20 +5,17 @@ import picture
 import stdaudio
 import stddraw
 import time
+
+import GameSettings
 from entities.Enemy import EnemyController
 from entities.GroundEntity import Ground
 from utils.utils import collides
-
-def play_audio_background(filename):
-    thread = threading.Thread(target=stdaudio.playFile, args=(filename,))
-    thread.daemon = True  # Ensures the thread stops when the main program exits
-    thread.start()
 
 
 w = 1024
 h = 720
 
-GAME_FPS = 60
+GAME_FPS = GameSettings.FPS
 frame_time = 1 / GAME_FPS
 
 last_shot_fired = time.time()
@@ -46,7 +43,7 @@ def game_loop():
 
     if pressed_key[stddraw.K_s]:
         if time.time() - last_shot_fired > 1:
-            play_audio_background("assets/sounds/blast-101soundboard")
+            play_audio_background(GameSettings.gun_fire_sound)
 
             last_shot_fired = time.time()
 
@@ -109,8 +106,8 @@ if __name__ == '__main__':
 
         # Render FPS
         stddraw.setPenColor(stddraw.RED)
-        stddraw.text(100, 100, "%.2f: %.2f" % (
-            avg_fps, (1/(total_frame_time))
+        stddraw.text(100, 100, "FPS: %.2f" % (
+            avg_fps
         ))
 
         avg_fps_diff = GAME_FPS + 5 - avg_fps

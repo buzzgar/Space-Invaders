@@ -1,6 +1,7 @@
 import picture
 import stddraw
 
+import GameSettings
 from utils.utils import GameObject
 
 
@@ -14,6 +15,13 @@ class ClassicEnemy(GameObject):
     def _draw(self):
 
         stddraw.picture(self.p, self.x, self.y, self.width, self.height)
+
+    def kill_enemy(self):
+        self.is_alive = False
+        self.allow_draw = False
+        self.is_destroyed = True
+
+
 
 class EnemyController:
 
@@ -30,7 +38,7 @@ class EnemyController:
 
         self.direction = self.RIGHT
 
-        p = picture.Picture("assets/tie-fighter.png")
+        p = picture.Picture(GameSettings.enemy_sprite_path)
 
         a_ratio = p.width() / p.height()
         self.enemy_width = self.enemy_height * a_ratio
@@ -57,9 +65,9 @@ class EnemyController:
 
         for enemy in self.enemy_list:
             if self.direction == self.RIGHT:
-                enemy.x += 10
+                enemy.x += GameSettings.alien_speed_x
             else:
-                enemy.x -= 10
+                enemy.x -= GameSettings.alien_speed_x
 
         for enemy in self.enemy_list:
 
@@ -75,7 +83,7 @@ class EnemyController:
 
         if move_down:
             for enemy in self.enemy_list:
-                enemy.y -= 10
+                enemy.y -= GameSettings.alien_speed_y
 
     def render(self):
         for enemy in self.enemy_list:
