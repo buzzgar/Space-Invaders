@@ -17,7 +17,7 @@ class Gif:
         self.frames = stdarray.create1D(num_frames, "") #create array to store each frame 
 
         for i in range(0, num_frames): #populate array
-            self.frames[i] = Picture(str(i+1) + ".jpg")
+            self.frames[i] = Picture("assets/" + str(i+1) + ".jpg")
 
         self.dimensions = self.frames[0] #set up standard dimensions for all frames 
 
@@ -69,12 +69,7 @@ def main():
     #play music 
 #    stdaudio.playFile("intromusic")
    
-    #setup gif 
-    gif = Gif(num_frames = 5) 
-    gif.setup() 
-
-    #setup title screen
-    menu = TitleScreen(gif.w,gif.h)
+    #setup gif
 
     i = 1 
     while True:

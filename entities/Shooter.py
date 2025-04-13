@@ -7,22 +7,43 @@ from utils.utils import GameObject
 #assumes a scale of -1,1 for both x and y
 class Shooter(GameObject):
     def __init__(self, name, x, y, width, height, color, scaleFactor = 0.1, playerFile = 'player1.txt'):
-        super().__init__(name, x, y, width, height, color)
 
         self._shooter = self._getShooterShape(playerFile)
 
         self._width = 2*scaleFactor
         self._heigth = 2*scaleFactor
 
+        super().__init__(name, x, y, self._width, self._heigth, color)
+
+        self.screen_width = width
+        self.screen_height = height
+
         self._pixelHeight = self._width/len(self._shooter)
         self._pixelWidth = self._heigth/len(self._shooter[0])
 
-        self._x = self.width//2
+        self._x = self.screen_width//2
         self._y = 0.9 * self.height
 
-        self._speed = 0.08
+        self.x = self._x
+        self.y = self._y
+
+        self._speed = 10
         self._angle = 0
-       
+
+    def get_x(self):
+        return self._x
+
+    def get_y(self):
+        return self._y
+
+    def get_width(self):
+        return self._width
+
+    def get_height(self):
+        return self._heigth
+
+    def get_angle(self):
+        return self._angle
 
     def move(self, direction):
         if direction.lower() == 'a':
@@ -31,17 +52,22 @@ class Shooter(GameObject):
             self._moveRight()
 
     def _moveLeft(self):
-        if self._x - (self._width / 2) <= -1:
-            self._x = -1 
+        if self._x - (self._width / 2) <= 0:
+            self._x = 0
         else:
             self._x -= self._speed
 
+        self.x = self._x
+        self.y = self._y
+
     def _moveRight(self):
-        if self._x + (self._width/2) >= 0.8:
-            self._x = 1 - self._width
+        if self._x + (self._width/2) >= self.screen_width:
+            self._x = self.screen_width
         else:
             self._x += self._speed
-    
+
+        self.x = self._x
+        self.y = self._y
 
     def rotate(self, angle):
         if angle < 0:
