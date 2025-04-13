@@ -4,11 +4,14 @@ import numpy as np
 import picture
 import stdaudio
 import stddraw
+import stdarray
 import time
 
 import GameSettings
 from entities.Enemy import EnemyController
 from entities.GroundEntity import Ground
+from entities.Shooter import Shooter
+from utils.SoundManager import play_audio_background
 from utils.utils import collides
 
 
@@ -24,6 +27,7 @@ is_in_menu = False
 
 enemy_controller = EnemyController(w, h)
 ground_level = Ground(0, 0, w, 40)
+shooter = Shooter("", 0, 0, w, 40, None, playerFile='assets/player1.txt', scaleFactor=40)
 
 star_01 = picture.Picture("assets/spr_stars01.png")
 star_02 = picture.Picture("assets/spr_stars02.png")
@@ -51,6 +55,8 @@ def game_loop():
 
     enemy_controller.step()
     enemy_controller.render()
+
+    shooter.drawShooter()
 
     for enemy in enemy_controller.enemy_list:
         if not enemy.allow_draw:

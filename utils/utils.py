@@ -37,3 +37,4 @@ def collides(entity1: GameObject, entity2: GameObject) -> bool:
             e1_y + entity1.height > e2_y and
             e1_y < e2_y + entity2.height
     )
+
