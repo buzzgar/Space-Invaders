@@ -45,6 +45,20 @@ def game_loop():
     if pressed_key[stddraw.K_q]:
         exit(1)
 
+    if stddraw.hasNextKeyTyped():
+            userInput = stddraw.nextKeyTyped()
+            match userInput:
+                case 'A' | 'a':
+                    player.move(userInput)
+                case 'D' | 'd':
+                   player.move(userInput)
+                case 'q' | 'Q':
+                    player.rotate(angle)
+                case 'e' | 'E':
+                    player.rotate(-angle)
+        player.drawShooter()
+        stddraw.show(60)
+
     if pressed_key[stddraw.K_s]:
         if time.time() - last_shot_fired > 1:
             play_audio_background(GameSettings.gun_fire_sound)
