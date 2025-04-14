@@ -1,3 +1,6 @@
+import stdaudio
+
+
 class GameObject:
 
     def __init__(self, name, x, y, width, height, color):
@@ -22,6 +25,12 @@ class GameObject:
     def _draw(self):
         pass
 
+class Music:
+    def __init__(self, file):
+        self.filename = file
+
+    def play_audio(self):
+        stdaudio.playFile(self.filename)
 
 def collides(entity1: GameObject, entity2: GameObject) -> bool:
 

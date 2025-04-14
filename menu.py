@@ -4,14 +4,6 @@ import stdarray
 import stdaudio
 from picture import Picture #picture class so can get widths and heights of picture for background
 
-
-class Music: 
-    def __init__(self,file):
-        self.filename = file
-    
-    def play_audio(self):
-        stdaudio.playFile(self.filename)
-
 class Gif:
     def __init__(self,num_frames):
         self.frames = stdarray.create1D(num_frames, "") #create array to store each frame 
@@ -55,27 +47,8 @@ class TitleScreen:
         stddraw.setFontSize(24)
         stddraw.text(self.x_centre, self.h - 300, "[A] move left, [S] stop move, [D] move right")
         stddraw.text(self.x_centre, self.h - 350 , "[Q] rotate left, [W] stop rotate, [E] rotate right")
-        stddraw.text(self.x_centre, self.y_centre, "[Space] to shoot")
-        stddraw.text(self.x_centre, self.y_centre - 100, "[H] for help")
-        stddraw.text(self.x_centre, self.y_centre - 200, "[X] to quit")
+        stddraw.text(self.x_centre, self.y_centre - 100, "[Space] to shoot")
+        stddraw.text(self.x_centre, self.y_centre - 200, "[H] for help")
+        stddraw.text(self.x_centre, self.y_centre - 300, "[X] to quit")
         stddraw.setFontSize(35)
-        stddraw.text(self.x_centre, self.y_centre - 300, "Press any key to start")
-
-
-
-
-def main():
-
-    #play music 
-#    stdaudio.playFile("intromusic")
-   
-    #setup gif
-
-    i = 1 
-    while True:
-        for i in range(0,5):
-            gif.draw_frame(i)
-            menu.instructions()
-            stddraw.show(100)
-if __name__ == '__main__':
-    main() 
+        stddraw.text(self.x_centre, self.y_centre - 400, "Press any key to start")

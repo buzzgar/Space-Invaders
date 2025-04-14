@@ -1,6 +1,7 @@
 import stddraw
 import math
 
+import GameSettings
 from utils.utils import GameObject
 
 
@@ -28,6 +29,8 @@ class Shooter(GameObject):
         self.y = self._y
 
         self._speed = 10
+        self._delta_angle = GameSettings.player_angle_change
+
         self._angle = 0
 
     def get_x(self):
@@ -45,13 +48,7 @@ class Shooter(GameObject):
     def get_angle(self):
         return self._angle
 
-    def move(self, direction):
-        if direction.lower() == 'a':
-            self._moveLeft()
-        else:
-            self._moveRight()
-
-    def _moveLeft(self):
+    def moveLeft(self):
         if self._x - (self._width / 2) <= 0:
             self._x = 0
         else:
@@ -60,7 +57,7 @@ class Shooter(GameObject):
         self.x = self._x
         self.y = self._y
 
-    def _moveRight(self):
+    def moveRight(self):
         if self._x + (self._width/2) >= self.screen_width:
             self._x = self.screen_width
         else:
@@ -69,13 +66,10 @@ class Shooter(GameObject):
         self.x = self._x
         self.y = self._y
 
-    def rotate(self, angle):
-        if angle < 0:
-            self._clockwise(angle)
-        else:
-            self._anticlockwise(angle)
+    def anticlockwise(self):
 
-    def _anticlockwise(self,angle):
+        angle = self._delta_angle
+
         new_angle = self._angle + math.radians(angle)
         if new_angle > math.radians(45):
             self._angle = math.radians(45)
@@ -83,7 +77,10 @@ class Shooter(GameObject):
             self._angle = new_angle
 
 
-    def _clockwise(self,angle):
+    def clockwise(self):
+
+        angle = -self._delta_angle
+
         new_angle = self._angle + math.radians(angle)
         if new_angle < math.radians(-45):
             self._angle = math.radians(-45)
