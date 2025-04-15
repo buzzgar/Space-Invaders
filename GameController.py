@@ -41,6 +41,9 @@ class Game:
         #counts when missile hits the enemy
         self.targert_hit_count = 0 
 
+        #initialise background 
+        self.background = Background() 
+        
         self.w = w
         self.h = h
 
@@ -185,6 +188,8 @@ class Game:
     def render(self, i):
         stddraw.clear(stddraw.BLACK)
 
+        #display background 
+        self.background.display()
         # stddraw.picture(star_01, w//2, h//2, w, h)
         # stddraw.picture(star_02, w//2, h//2, w, h)
 
