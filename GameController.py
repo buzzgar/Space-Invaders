@@ -67,6 +67,7 @@ class Game:
 
         self.gif.draw_frame((i % 50) // 10)
         self.menu.instructions()
+        self.menu.
         return False
 
     def game_over(self):
