@@ -8,6 +8,8 @@ intro_sound = "assets/sounds/intro_music"
 enemy_sprite_path = "assets/tie-fighter.png"
 player_sprite_path = "assets/player1.txt"
 missile_sprite_path = "assets/laser.gif"
+missile_left_sprite_path = "assets/laser_left.gif"
+missile_right_sprite_path = "assets/laser_right.gif"
 
 FPS = 80
 
