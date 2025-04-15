@@ -67,7 +67,7 @@ class Game:
 
         self.gif.draw_frame((i % 50) // 10)
         self.menu.instructions()
-        self.menu.
+        play_audio_background("intro_music")
         return False
 
     def game_over(self):
