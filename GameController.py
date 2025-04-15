@@ -124,9 +124,9 @@ class Game:
                     if time.time() - self.last_shot_fired > 0.2:
                         self.last_shot_fired = time.time()
                         if angle > math.radians(100):
-                            GameSettings.missile_sprite_path = "laser_left.gif"
+                            GameSettings.missile_sprite_path = missile_left_sprite_path
                         elif angle < math.radians(80):
-                            GameSettings.missile_sprite_path = "laser_right.gif"
+                            GameSettings.missile_sprite_path = missile_right_sprite_path
                         self.missile_controller.generate(x, y, -self.shooter.get_angle() * 180 / math.pi)
 
                     if time.time() - self.last_shot_fired_sound > 1:
