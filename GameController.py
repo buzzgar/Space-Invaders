@@ -11,6 +11,7 @@ from entities.Shooter import Shooter
 from entities.missile_class import MissileController
 from menu import Gif, TitleScreen
 from utils.SoundManager import play_audio_background
+from utils.background import Background
 from utils.utils import collides
 
 
