@@ -119,8 +119,14 @@ class Game:
                 key = userInput
                 if key == ' ':  # check if new missile is being called, then creates it
 
+                    angle = self.shooter.get_angle() #current shooter angle 
+                    
                     if time.time() - self.last_shot_fired > 0.2:
                         self.last_shot_fired = time.time()
+                        if angle > math.radians(100):
+                            GameSettings.missile_sprite_path = "laser_left.gif"
+                        elif angle < math.radians(80):
+                            GameSettings.missile_sprite_path = "laser_right.gif"
                         self.missile_controller.generate(x, y, -self.shooter.get_angle() * 180 / math.pi)
 
                     if time.time() - self.last_shot_fired_sound > 1:
