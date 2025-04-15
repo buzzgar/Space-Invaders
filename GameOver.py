@@ -16,4 +16,4 @@ class GameOverScreen:
         stddraw.setPenColor(stddraw.WHITE)
         stddraw.setFontSize(50)
         stddraw.text(self.x_centre, self.y_centre, "Game Over")
-        stddraw.text(self.x_centre, self.y_centre - 100, "[Press R to restart]")
+        stddraw.text(self.x_centre, self.y_centre - 100, "[[R] to restart]")
