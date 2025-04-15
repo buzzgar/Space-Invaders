@@ -11,6 +11,7 @@ missile_sprite_path = "assets/laser.gif"
 missile_left_sprite_path = "assets/laser_left.gif"
 missile_right_sprite_path = "assets/laser_right.gif"
 
+background_sprite_path = "assets/1.png" 
 FPS = 80
 
 player_angle_change = 5
