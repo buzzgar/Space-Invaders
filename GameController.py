@@ -189,8 +189,9 @@ class Game:
 
         #display counter 
         stddraw.setPenColor(stddraw.WHITE)
-        stddraw.setFontSize(20)
-
+        stddraw.setFontSize(24)
+        stddraw.text(100,30, "Hits: + " str(self.targert_hit_count))
+        
         if self.is_in_menu:
             return self.main_menu(i)
         elif self.is_player_dead:
