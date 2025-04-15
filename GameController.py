@@ -37,6 +37,9 @@ class Game:
         self.enemy_controller = None
         self.running = True
 
+        #counts when missile hits the enemy
+        self.targert_hit_count = 0 
+
         self.w = w
         self.h = h
 
@@ -176,12 +179,17 @@ class Game:
                 if collides(missile, enemy):
                     missile.allow_draw = False
                     enemy.allow_draw = False
+                    self.targert_hit_count += 1
 
     def render(self, i):
         stddraw.clear(stddraw.BLACK)
 
         # stddraw.picture(star_01, w//2, h//2, w, h)
         # stddraw.picture(star_02, w//2, h//2, w, h)
+
+        #display counter 
+        stddraw.setPenColor(stddraw.WHITE)
+        stddraw.setFontSize(20)
 
         if self.is_in_menu:
             return self.main_menu(i)
