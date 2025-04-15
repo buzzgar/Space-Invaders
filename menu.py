@@ -53,4 +53,4 @@ class TitleScreen:
         stddraw.setFontSize(35)
         stddraw.text(self.x_centre, self.y_centre - 400, "Press any key to start")
     def intro_music(self):
-        play_audio_background("Game_Over")
+        play_audio_background("intro_music")
