@@ -58,10 +58,13 @@ class Shooter(GameObject):
         self.y = self._y
 
     def moveRight(self):
-        if self._x + (self._width/2) >= self.screen_width:
-            self._x = self.screen_width
-        else:
+
+        # Change this
+        if self._x + (self._width) < self.screen_width:
             self._x += self._speed
+
+        if self._x + (self._width) >= self.screen_width:
+            self._x -= self._speed
 
         self.x = self._x
         self.y = self._y

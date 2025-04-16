@@ -78,6 +78,7 @@ class Game:
             match userInput:
                 case 'R' | 'r':
                     self.reset()
+
     def reset(self):
         self.is_in_menu = True
         self.is_player_dead = False
@@ -157,7 +158,7 @@ class Game:
             if collides(self.shooter, enemy):
                 enemy.allow_draw = False
                 self.is_player_dead = True
-                play_audio_background("Game_Over")
+                play_audio_background(GameSettings.game_over_sound)
 
             for missile in self.missile_controller.missile:
                 if not missile:
