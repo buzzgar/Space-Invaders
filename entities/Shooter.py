@@ -1,3 +1,5 @@
+import time
+
 import stddraw
 import math
 
@@ -23,7 +25,7 @@ class Shooter(GameObject):
         self._pixelWidth = self._heigth/len(self._shooter[0])
 
         self._x = self.screen_width//2
-        self._y = 0.9 * self.height
+        self._y = 0.9 * self.screen_height
 
         self.x = self._x
         self.y = self._y
@@ -74,8 +76,8 @@ class Shooter(GameObject):
         angle = self._delta_angle
 
         new_angle = self._angle + math.radians(angle)
-        if new_angle > math.radians(45):
-            self._angle = math.radians(45)
+        if new_angle > math.radians(90):
+            self._angle = math.radians(90)
         else:
             self._angle = new_angle
 
@@ -85,8 +87,8 @@ class Shooter(GameObject):
         angle = -self._delta_angle
 
         new_angle = self._angle + math.radians(angle)
-        if new_angle < math.radians(-45):
-            self._angle = math.radians(-45)
+        if new_angle < math.radians(-90):
+            self._angle = math.radians(-90)
         else:
             self._angle = new_angle
         

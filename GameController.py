@@ -1,6 +1,7 @@
 import math
 import time
 
+import picture
 import stddraw
 
 import GameSettings
@@ -14,6 +15,8 @@ from utils.SoundManager import play_audio_background
 from utils.background import Background
 from utils.utils import collides
 
+star_01 = picture.Picture("assets/spr_stars01.png")
+star_02 = picture.Picture("assets/spr_stars02.png")
 
 class Game:
 
@@ -39,10 +42,7 @@ class Game:
         self.running = True
 
         #counts when missile hits the enemy
-        self.targert_hit_count = 0 
-
-        #initialise background 
-        self.background = Background() 
+        self.targert_hit_count = 0
         
         self.w = w
         self.h = h
@@ -94,7 +94,7 @@ class Game:
         self.enemy_controller = EnemyController(self.w, self.h)
         self.ground_level = Ground(0, 0, self.w, 40)
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
-        self.missile_controller = MissileController(GameSettings.missile_sprite_path)
+        self.missile_controller = MissileController(None, self.shooter.get_height())
         self.game_over_class = GameOverScreen(self.w, self.h)
 
         self.moving_direction = 0
@@ -126,16 +126,12 @@ class Game:
 
                 key = userInput
                 if key == ' ':  # check if new missile is being called, then creates it
-
-                    angle = self.shooter.get_angle() #current shooter angle 
                     
                     if time.time() - self.last_shot_fired > 0.2:
                         self.last_shot_fired = time.time()
-                        if angle > math.radians(100):
-                            GameSettings.missile_sprite_path = missile_left_sprite_path
-                        elif angle < math.radians(80):
-                            GameSettings.missile_sprite_path = missile_right_sprite_path
-                        self.missile_controller.generate(x, y, -self.shooter.get_angle() * 180 / math.pi)
+                        angle = int(round(self.shooter.get_angle() * 180 / math.pi, 5))
+
+                        self.missile_controller.generate(x, y, angle)
 
                     if time.time() - self.last_shot_fired_sound > 1:
                         self.last_shot_fired_sound = time.time()
@@ -162,6 +158,11 @@ class Game:
 
         self.shooter.drawShooter()
 
+        # display counter
+        stddraw.setPenColor(stddraw.RED)
+        stddraw.setFontSize(24)
+        stddraw.text(100, self.ground_level.height//2, "Hits: + " + str(self.targert_hit_count))
+
         for enemy in self.enemy_controller.enemy_list:
             if not enemy.allow_draw:
                 continue
@@ -187,17 +188,14 @@ class Game:
                     self.targert_hit_count += 1
 
     def render(self, i):
+        global star_01, star_02
+
         stddraw.clear(stddraw.BLACK)
 
-        #display background 
-        self.background.display()
-        # stddraw.picture(star_01, w//2, h//2, w, h)
-        # stddraw.picture(star_02, w//2, h//2, w, h)
+        w = self.w
+        h = self.h
 
-        #display counter 
-        stddraw.setPenColor(stddraw.WHITE)
-        stddraw.setFontSize(24)
-        stddraw.text(100,30, "Hits: + " str(self.targert_hit_count))
+        #stddraw.picture(star_02, w//2, h//2, w, h)
         
         if self.is_in_menu:
             return self.main_menu(i)
