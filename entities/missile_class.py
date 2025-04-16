@@ -67,9 +67,6 @@ def main():
     #setup 
     canvas = Canvas(10.0,10.0)
     canvas.setup() 
-
-    #initialise dimensions of missile 
-    missile = Missile("../assets/laser.gif")
     
     while True: #inifinte loop constantly checking if key is pressed 
         stddraw.clear()  #every time it loops this statement clears pervious position of missile
@@ -78,12 +75,15 @@ def main():
         
         if stddraw.hasNextKeyTyped(): 
             key = stddraw.nextKeyTyped()
-            if key == ' ': #check if new missile is being called, then creates it 
+            if key == ' ': #check if new missile is being called, then creates it
+                missile = Missile("laser.gif")
                 missile.generate(x,y, 90)
             if key == 'a': #moves left
+                missile = Missile("laser_left.gif")
                 missile.generate(x,y, 135)
             if key == 'b': #moves right 
-                missile.generate(x,y,45) 
+                missile = Missile("laser_right.gif")
+                missile.generate(x,y,45)
         #angled trajectory 
         missile.sequence()
 

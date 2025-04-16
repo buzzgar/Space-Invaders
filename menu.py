@@ -9,7 +9,7 @@ class Gif:
         self.frames = stdarray.create1D(num_frames, "") #create array to store each frame 
 
         for i in range(0, num_frames): #populate array
-            self.frames[i] = Picture("assets/" + str(i+1) + ".jpg")
+            self.frames[i] = Picture("assets/" + str(i+1) + ".png")
 
         self.dimensions = self.frames[0] #set up standard dimensions for all frames 
 

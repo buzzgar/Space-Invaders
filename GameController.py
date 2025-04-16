@@ -11,6 +11,7 @@ from entities.Shooter import Shooter
 from entities.missile_class import MissileController
 from menu import Gif, TitleScreen
 from utils.SoundManager import play_audio_background
+from utils.background import Background
 from utils.utils import collides
 
 
@@ -37,6 +38,12 @@ class Game:
         self.enemy_controller = None
         self.running = True
 
+        #counts when missile hits the enemy
+        self.targert_hit_count = 0 
+
+        #initialise background 
+        self.background = Background() 
+        
         self.w = w
         self.h = h
 
@@ -67,6 +74,7 @@ class Game:
 
         self.gif.draw_frame((i % 50) // 10)
         self.menu.instructions()
+        play_audio_background(GameSettings.intro_sound)
         return False
 
     def game_over(self):
@@ -119,8 +127,14 @@ class Game:
                 key = userInput
                 if key == ' ':  # check if new missile is being called, then creates it
 
+                    angle = self.shooter.get_angle() #current shooter angle 
+                    
                     if time.time() - self.last_shot_fired > 0.2:
                         self.last_shot_fired = time.time()
+                        if angle > math.radians(100):
+                            GameSettings.missile_sprite_path = missile_left_sprite_path
+                        elif angle < math.radians(80):
+                            GameSettings.missile_sprite_path = missile_right_sprite_path
                         self.missile_controller.generate(x, y, -self.shooter.get_angle() * 180 / math.pi)
 
                     if time.time() - self.last_shot_fired_sound > 1:
@@ -170,13 +184,21 @@ class Game:
                 if collides(missile, enemy):
                     missile.allow_draw = False
                     enemy.allow_draw = False
+                    self.targert_hit_count += 1
 
     def render(self, i):
         stddraw.clear(stddraw.BLACK)
 
+        #display background 
+        self.background.display()
         # stddraw.picture(star_01, w//2, h//2, w, h)
         # stddraw.picture(star_02, w//2, h//2, w, h)
 
+        #display counter 
+        stddraw.setPenColor(stddraw.WHITE)
+        stddraw.setFontSize(24)
+        stddraw.text(100,30, "Hits: + " str(self.targert_hit_count))
+        
         if self.is_in_menu:
             return self.main_menu(i)
         elif self.is_player_dead:
