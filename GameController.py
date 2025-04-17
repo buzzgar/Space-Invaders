@@ -12,7 +12,6 @@ from entities.Shooter import Shooter
 from entities.missile_class import MissileController
 from menu import Gif, TitleScreen
 from utils.SoundManager import SoundPlayer
-from utils.background import Background
 from utils.utils import collides
 
 star_01 = picture.Picture("assets/spr_stars01.png")
@@ -31,6 +30,7 @@ class Game:
     MOVING_RIGHT = 1
 
     def __init__(self, w, h):
+        self.success = None
         self.hit_points = {}
         self.rotating_direction = None
         self.moving_direction = None
@@ -94,6 +94,7 @@ class Game:
     def reset(self):
         self.is_in_menu = True
         self.is_player_dead = False
+        self.success = False
 
         self.enemy_controller = EnemyController(self.w, self.h)
         self.ground_level = Ground(0, 0, self.w, 40)
@@ -106,6 +107,8 @@ class Game:
 
         self.player_lives = 5
         self.hit_points = {}
+
+        self.targert_hit_count = 0
 
     def game_loop(self, i):
 
@@ -175,6 +178,15 @@ class Game:
         stddraw.setFontSize(24)
         stddraw.text(self.w - 50, self.h - 20, f"♥ {self.player_lives}")
 
+        enemies_flag = False
+        for enemy in self.enemy_controller.enemy_list + self.enemy_controller.break_list:
+            if enemy.allow_draw:
+                enemies_flag = True
+                break
+
+        if not enemies_flag:
+            self.success = True
+
         for hit in self.hit_points:
             stddraw.setFontSize(12)
             if i - hit > GameSettings.hit_point_frame_time:
@@ -229,6 +241,17 @@ class Game:
             return self.main_menu(i)
         elif self.is_player_dead:
             self.game_over()
+        elif self.success:
+            self.success_screen()
         else:
             self.game_loop(i)
+
+    def success_screen(self):
+        self.game_over_class.success()
+
+        if stddraw.hasNextKeyTyped():
+            userInput = stddraw.nextKeyTyped()
+            match userInput:
+                case 'R' | 'r':
+                    self.reset()
 

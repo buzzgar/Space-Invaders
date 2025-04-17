@@ -17,3 +17,12 @@ class GameOverScreen:
         stddraw.setFontSize(50)
         stddraw.text(self.x_centre, self.y_centre, "Game Over")
         stddraw.text(self.x_centre, self.y_centre - 100, "[R] to restart")
+
+    def success(self):
+
+        stddraw.clear(stddraw.GREEN)
+
+        stddraw.setPenColor(stddraw.WHITE)
+        stddraw.setFontSize(50)
+        stddraw.text(self.x_centre, self.y_centre, "You Won!")
+        stddraw.text(self.x_centre, self.y_centre - 100, "[R] to restart")
