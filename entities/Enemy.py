@@ -1,3 +1,4 @@
+import math
 import random
 
 import picture
@@ -51,7 +52,7 @@ class EnemyController:
         self.enemy_list = []
 
         for i in range(0, enemy_count):
-            x, y = self.enemy_position_striped(i, start_x, start_y)
+            x, y = self.enemy_position_default(i, start_x, start_y)
 
             self.enemy_list.append(ClassicEnemy(
                 "enemy",
@@ -61,6 +62,8 @@ class EnemyController:
                 self.enemy_height,
                 p)
             )
+
+        self.break_list = []
 
     def enemy_position_default(self, i, start_x, start_y):
 
@@ -106,10 +109,23 @@ class EnemyController:
                 move_down = True
                 break
 
+        if random.randint(0, 100) == 0:
+            if len(self.enemy_list) > 0:
+                self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
+
         if move_down:
             for enemy in self.enemy_list:
                 enemy.y -= GameSettings.alien_speed_y
 
+    def render_breaks(self, shooter_x, shooter_y):
+        for enemy in self.break_list:
+            angle = math.atan2(shooter_y - enemy.y, shooter_x - enemy.x)
+            enemy.x += GameSettings.alien_speed_x * math.cos(angle) * 0.8
+            enemy.y += GameSettings.alien_speed_y * math.sin(angle) * 0.8
+
     def render(self):
         for enemy in self.enemy_list:
+            enemy.draw()
+
+        for enemy in self.break_list:
             enemy.draw()

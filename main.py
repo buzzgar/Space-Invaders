@@ -53,9 +53,9 @@ if __name__ == '__main__':
 
         # Render FPS
         stddraw.setPenColor(stddraw.RED)
-        stddraw.text(100, 100, "FPS: %.2f" % (
-            avg_fps
-        ))
+        # stddraw.text(100, 100, "FPS: %.2f" % (
+        #     avg_fps
+        # ))
 
         avg_fps_diff = game.fps + 5 - avg_fps
 

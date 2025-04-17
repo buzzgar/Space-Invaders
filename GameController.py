@@ -11,7 +11,7 @@ from entities.GroundEntity import Ground
 from entities.Shooter import Shooter
 from entities.missile_class import MissileController
 from menu import Gif, TitleScreen
-from utils.SoundManager import play_audio_background
+from utils.SoundManager import SoundPlayer
 from utils.background import Background
 from utils.utils import collides
 
@@ -31,6 +31,7 @@ class Game:
     MOVING_RIGHT = 1
 
     def __init__(self, w, h):
+        self.hit_points = {}
         self.rotating_direction = None
         self.moving_direction = None
 
@@ -43,6 +44,7 @@ class Game:
 
         #counts when missile hits the enemy
         self.targert_hit_count = 0
+        self.player_lives = 5
         
         self.w = w
         self.h = h
@@ -65,6 +67,8 @@ class Game:
 
         self.menu = TitleScreen(w, h)
 
+        self.sound_player = SoundPlayer()
+
     def main_menu(self, i):
 
         if stddraw.hasNextKeyTyped():
@@ -72,9 +76,9 @@ class Game:
 
             return True
 
-        self.gif.draw_frame((i % 50) // 10)
+        self.gif.draw_frame((i % 20) // 4)
         self.menu.instructions()
-        play_audio_background(GameSettings.intro_sound)
+        #play_audio_background(GameSettings.intro_sound)
         return False
 
     def game_over(self):
@@ -94,11 +98,14 @@ class Game:
         self.enemy_controller = EnemyController(self.w, self.h)
         self.ground_level = Ground(0, 0, self.w, 40)
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
-        self.missile_controller = MissileController(None, self.shooter.get_height())
+        self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
         self.game_over_class = GameOverScreen(self.w, self.h)
 
         self.moving_direction = 0
         self.rotating_direction = 0
+
+        self.player_lives = 5
+        self.hit_points = {}
 
     def game_loop(self, i):
 
@@ -127,15 +134,15 @@ class Game:
                 key = userInput
                 if key == ' ':  # check if new missile is being called, then creates it
                     
-                    if time.time() - self.last_shot_fired > 0.2:
+                    if time.time() - self.last_shot_fired > GameSettings.fire_rate:
                         self.last_shot_fired = time.time()
                         angle = int(round(self.shooter.get_angle() * 180 / math.pi, 5))
 
                         self.missile_controller.generate(x, y, angle)
 
-                    if time.time() - self.last_shot_fired_sound > 1:
+                    if time.time() - self.last_shot_fired_sound > GameSettings.fire_rate:
                         self.last_shot_fired_sound = time.time()
-                        play_audio_background(GameSettings.gun_fire_sound)
+                        self.sound_player.play_audio_background(GameSettings.gun_fire_sound)
 
         if self.moving_direction == self.MOVING_LEFT:
             self.shooter.moveLeft()
@@ -154,6 +161,7 @@ class Game:
         self.ground_level.draw()
 
         self.enemy_controller.step()
+        self.enemy_controller.render_breaks(self.shooter.get_x(), self.shooter.get_y())
         self.enemy_controller.render()
 
         self.shooter.drawShooter()
@@ -161,9 +169,21 @@ class Game:
         # display counter
         stddraw.setPenColor(stddraw.RED)
         stddraw.setFontSize(24)
-        stddraw.text(100, self.ground_level.height//2, "Hits: + " + str(self.targert_hit_count))
+        stddraw.text(50, self.h - 20, "Hits: + " + str(self.targert_hit_count))
 
-        for enemy in self.enemy_controller.enemy_list:
+        stddraw.setPenColor(stddraw.RED)
+        stddraw.setFontSize(24)
+        stddraw.text(self.w - 50, self.h - 20, f"♥ {self.player_lives}")
+
+        for hit in self.hit_points:
+            stddraw.setFontSize(12)
+            if i - hit > GameSettings.hit_point_frame_time:
+                continue
+
+            stddraw.setPenColor(stddraw.RED)
+            stddraw.text(self.hit_points[hit][0], self.hit_points[hit][1], "+1")
+
+        for enemy in self.enemy_controller.enemy_list + self.enemy_controller.break_list:
             if not enemy.allow_draw:
                 continue
 
@@ -172,8 +192,12 @@ class Game:
 
             if collides(self.shooter, enemy):
                 enemy.allow_draw = False
-                self.is_player_dead = True
-                play_audio_background(GameSettings.game_over_sound)
+
+                self.player_lives -= 1
+
+                if self.player_lives == 0:
+                    self.is_player_dead = True
+                    self.sound_player.play_audio_background(GameSettings.game_over_sound)
 
             for missile in self.missile_controller.missile:
                 if not missile:
@@ -186,6 +210,10 @@ class Game:
                     missile.allow_draw = False
                     enemy.allow_draw = False
                     self.targert_hit_count += 1
+
+                    self.hit_points[i] = (enemy.x, enemy.y)
+
+                    self.sound_player.play_audio_background("assets/sounds/explosion-2")
 
     def render(self, i):
         global star_01, star_02
