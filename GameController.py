@@ -65,7 +65,9 @@ class Game:
 
         self.reset()
 
-        self.gif = Gif(num_frames=5)
+        self.intro_gif = Gif("menu", num_frames=5)
+        self.fail_gif = Gif("fail", num_frames=2)
+        self.win_gif = Gif("win", num_frames=4)
 
         self.menu = TitleScreen(w, h)
 
@@ -78,14 +80,15 @@ class Game:
 
             return True
 
-        self.gif.draw_frame((i // 2) % 5)
+        self.intro_gif.draw_frame((i // 5) % 5)
         self.menu.instructions()
-        #self.sound_player.play_audio_background(GameSettings.intro_sound)
+
         return False
 
-    def game_over(self):
+    def game_over(self, i):
 
-        self.game_over_class.game_over()
+        self.fail_gif.draw_frame((i // 60) % 2)
+        #self.game_over_class.game_over()
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -93,10 +96,10 @@ class Game:
                 case 'R' | 'r':
                     self.reset()
 
-    def show_win_screen(self):
+    def show_win_screen(self, i):
 
-        #self.sound_player.play_audio_background(GameSettings.intro_sound)
-        self.game_over_class.success()
+        self.win_gif.draw_frame((i // 10) % 4)
+        #self.game_over_class.success()
 
 
         if stddraw.hasNextKeyTyped():
@@ -253,13 +256,15 @@ class Game:
         # stddraw.picture(star_02, w//2, h//2, w, h)
 
         if self.is_in_menu:
+            #self.sound_player.play_audio_background(GameSettings.intro_sound)
             return self.main_menu(i)
         elif self.is_player_dead:
-            self.game_over()
+            self.game_over(i)
         #elif self.success:
             #self.success_screen()
         elif enemies_destroyed == len(self.enemy_controller.enemy_list):
-            self.show_win_screen()
+            self.sound_player.play_audio_background(GameSettings.victory_sound)
+            self.show_win_screen(i)
         else:
             self.game_loop(i)
 
