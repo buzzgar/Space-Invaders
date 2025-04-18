@@ -78,7 +78,7 @@ class Game:
 
             return True
 
-        self.gif.draw_frame((i % 20) // 4)
+        self.gif.draw_frame((i // 2) % 5)
         self.menu.instructions()
         #play_audio_background(GameSettings.intro_sound)
         return False
@@ -86,6 +86,16 @@ class Game:
     def game_over(self):
 
         self.game_over_class.game_over()
+
+        if stddraw.hasNextKeyTyped():
+            userInput = stddraw.nextKeyTyped()
+            match userInput:
+                case 'R' | 'r':
+                    self.reset()
+
+    def show_win_screen(self):
+
+        self.win_class.win()
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
