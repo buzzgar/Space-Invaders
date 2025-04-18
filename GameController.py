@@ -17,10 +17,10 @@ from utils.utils import collides
 star_01 = picture.Picture("assets/spr_stars01.png")
 star_02 = picture.Picture("assets/spr_stars02.png")
 
-enemies_destroyed = 0 #tally enemy deaths
+enemies_destroyed = 0  # tally enemy deaths
+
 
 class Game:
-
     MENU_SCREEN_FLAG = 100
     GAME_SCREEN_FLAG = 200
     GAME_OVER_SCREEN_FLAG = 300
@@ -44,10 +44,10 @@ class Game:
         self.enemy_controller = None
         self.running = True
 
-        #counts when missile hits the enemy
+        # counts when missile hits the enemy
         self.targert_hit_count = 0
         self.player_lives = 5
-        
+
         self.w = w
         self.h = h
 
@@ -80,7 +80,7 @@ class Game:
 
         self.gif.draw_frame((i // 2) % 5)
         self.menu.instructions()
-        #play_audio_background(GameSettings.intro_sound)
+        #self.sound_player.play_audio_background(GameSettings.intro_sound)
         return False
 
     def game_over(self):
@@ -95,7 +95,9 @@ class Game:
 
     def show_win_screen(self):
 
-        self.win_class.win()
+        #self.sound_player.play_audio_background(GameSettings.intro_sound)
+        self.game_over_class.success()
+
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -123,7 +125,7 @@ class Game:
         self.targert_hit_count = 0
 
     def game_loop(self, i):
-
+        global enemies_destroyed
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
 
@@ -148,7 +150,7 @@ class Game:
 
                 key = userInput
                 if key == ' ':  # check if new missile is being called, then creates it
-                    
+
                     if time.time() - self.last_shot_fired > GameSettings.fire_rate:
                         self.last_shot_fired = time.time()
                         angle = int(round(self.shooter.get_angle() * 180 / math.pi, 5))
@@ -248,14 +250,14 @@ class Game:
         w = self.w
         h = self.h
 
-        #stddraw.picture(star_02, w//2, h//2, w, h)
-        
+        # stddraw.picture(star_02, w//2, h//2, w, h)
+
         if self.is_in_menu:
             return self.main_menu(i)
         elif self.is_player_dead:
             self.game_over()
-        elif self.success:
-            self.success_screen()
+        #elif self.success:
+            #self.success_screen()
         elif enemies_destroyed == len(self.enemy_controller.enemy_list):
             self.show_win_screen()
         else:
@@ -269,4 +271,3 @@ class Game:
             match userInput:
                 case 'R' | 'r':
                     self.reset()
-
