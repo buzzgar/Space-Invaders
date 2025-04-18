@@ -17,6 +17,8 @@ from utils.utils import collides
 star_01 = picture.Picture("assets/spr_stars01.png")
 star_02 = picture.Picture("assets/spr_stars02.png")
 
+enemies_destroyed = 0 #tally enemy deaths
+
 class Game:
 
     MENU_SCREEN_FLAG = 100
@@ -221,6 +223,7 @@ class Game:
                 if collides(missile, enemy):
                     missile.allow_draw = False
                     enemy.allow_draw = False
+                    enemies_destroyed += 1
                     self.targert_hit_count += 1
 
                     self.hit_points[i] = (enemy.x, enemy.y)
@@ -228,7 +231,7 @@ class Game:
                     self.sound_player.play_audio_background("assets/sounds/explosion-2")
 
     def render(self, i):
-        global star_01, star_02
+        global star_01, star_02, enemies_destroyed
 
         stddraw.clear(stddraw.BLACK)
 
@@ -243,6 +246,8 @@ class Game:
             self.game_over()
         elif self.success:
             self.success_screen()
+        elif enemies_destroyed == len(self.enemy_controller.enemy_list):
+            self.show_win_screen()
         else:
             self.game_loop(i)
 
