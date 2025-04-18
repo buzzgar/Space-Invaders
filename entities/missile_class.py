@@ -73,7 +73,7 @@ class MissileController:
 
             self.missile[i].draw()
 
-            #moves missile at an angle 
+            #moves missile at an angle
             self.missile[i].x += 10 * np.sin(-self.angle)  #update y pos
             self.missile[i].y += 10 * np.cos(self.angle)  #update x pos
 
