@@ -129,3 +129,4 @@ class EnemyController:
 
         for enemy in self.break_list:
             enemy.draw()
+            
