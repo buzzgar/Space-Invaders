@@ -1,16 +1,14 @@
 import stddraw
-import stdio
 import stdarray
-import stdaudio
 from picture import Picture  # picture class so can get widths and heights of picture for background
 
 
 class Gif:
-    def __init__(self, num_frames):
+    def __init__(self, name, num_frames):
         self.frames = stdarray.create1D(num_frames, "")  # create array to store each frame
-
+        self.name = name
         for i in range(0, num_frames):  # populate array
-            self.frames[i] = Picture("assets/" + str(i + 1) + ".png")
+            self.frames[i] = Picture("assets/" + self.name + "_" + str(i + 1) + ".png")
 
         self.dimensions = self.frames[0]  # set up standard dimensions for all frames
 
