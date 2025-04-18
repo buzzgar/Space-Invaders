@@ -5,7 +5,6 @@ import stdarray
 from picture import Picture
 import math
 import numpy as np
-from scipy.ndimage import rotate
 
 import utils.utils
 from utils.utils import GameObject
