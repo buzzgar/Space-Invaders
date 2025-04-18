@@ -8,6 +8,7 @@ hit_point_frame_time = 20
 gun_fire_sound = "assets/sounds/blast-101soundboard"
 game_over_sound = "assets/sounds/Game_Over"
 intro_sound = "assets/sounds/intro_music"
+victory_sound = "assets/sounds/win_music"
 
 enemy_sprite_path = "assets/pngegg.png"
 player_sprite_path = "assets/player1.txt"
