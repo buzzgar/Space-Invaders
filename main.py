@@ -23,8 +23,6 @@ if __name__ == '__main__':
     stddraw.setXscale(0, w)
     stddraw.setYscale(0, h)
 
-    stddraw._show()
-
     fps_lst = []
 
     prev_time = time.perf_counter()  # More precise than time.time()
@@ -42,14 +40,7 @@ if __name__ == '__main__':
         sleep_time = game.frame_time - elapsed_time
         sleep_time = 1/(1 / sleep_time + avg_fps_diff)
 
-        if sleep_time > 0:
-            time.sleep(sleep_time)
-
-        # Compute FPS based on full frame duration
-        total_frame_time = time.perf_counter() - start_time
-        fps_lst.append(1 / total_frame_time)
-
-        avg_fps = np.average(fps_lst[-20:])
+        avg_fps = np.average(fps_lst[-21:-2])
 
         # Render FPS
         stddraw.setPenColor(stddraw.RED)
@@ -57,8 +48,14 @@ if __name__ == '__main__':
             avg_fps
         ))
 
-        avg_fps_diff = game.fps + 5 - avg_fps
+        stddraw.show(max(sleep_time * 1000, 0))
 
-        stddraw._show()
+        # Compute FPS based on full frame duration
+        total_frame_time = time.perf_counter() - start_time
+        fps_lst.append(1 / total_frame_time)
+
+        avg_fps = np.average(fps_lst[-20:])
+
+        avg_fps_diff = game.fps + 5 - avg_fps
 
         i += 1

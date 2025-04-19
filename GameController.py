@@ -5,7 +5,6 @@ import picture
 import stddraw
 
 import GameSettings
-from GameOver import GameOverScreen
 from entities.Enemy import EnemyController
 from entities.GroundEntity import Ground
 from entities.Shooter import Shooter
@@ -44,7 +43,7 @@ class Game:
         self.running = True
 
         # counts when missile hits the enemy
-        self.targert_hit_count = 0
+        self.target_hit_count = 0
         self.player_lives = 5
 
         self.w = w
@@ -62,9 +61,9 @@ class Game:
         self.is_in_menu = True
         self.is_player_dead = False
 
-        self.intro_gif = Gif("menu", num_frames=5)
-        self.fail_gif = Gif("fail", num_frames=2)
-        self.win_gif = Gif("win", num_frames=4)
+        self.intro_gif = Gif("menu", 5, self.w//2, self.h//2)
+        self.fail_gif = Gif("fail", 2, self.w//2, self.h//2)
+        self.win_gif = Gif("win", 4, self.w//2, self.h//2)
 
         self.menu = TitleScreen(w, h)
 
@@ -98,8 +97,8 @@ class Game:
     def show_win_screen(self, i):
 
         self.win_gif.draw_frame((i // 10) % 4)
-        #self.game_over_class.success()
 
+        #self.game_over_class.success()
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -108,7 +107,7 @@ class Game:
                     self.reset()
 
     def reset(self):
-        if self.sound_player != None:
+        if self.sound_player is not None:
             del self.sound_player
 
         self.is_in_menu = True
@@ -119,7 +118,6 @@ class Game:
         self.ground_level = Ground(0, 0, self.w, 40)
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
         self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
-        self.game_over_class = GameOverScreen(self.w, self.h)
 
         self.moving_direction = 0
         self.rotating_direction = 0
@@ -127,7 +125,7 @@ class Game:
         self.player_lives = 5
         self.hit_points = {}
 
-        self.targert_hit_count = 0
+        self.target_hit_count = 0
         self.enemies_destroyed = 0
 
         self.sound_player = SoundPlayer()
@@ -194,7 +192,7 @@ class Game:
         # display counter
         stddraw.setPenColor(stddraw.RED)
         stddraw.setFontSize(24)
-        stddraw.text(50, self.h - 20, "Hits: + " + str(self.targert_hit_count))
+        stddraw.text(50, self.h - 20, "Hits: + " + str(self.target_hit_count))
 
         stddraw.setPenColor(stddraw.RED)
         stddraw.setFontSize(24)
@@ -237,7 +235,7 @@ class Game:
                     missile.allow_draw = False
                     enemy.allow_draw = False
                     self.enemies_destroyed += 1
-                    self.targert_hit_count += 1
+                    self.target_hit_count += 1
 
                     self.hit_points[i] = (enemy.x, enemy.y)
 
@@ -246,12 +244,8 @@ class Game:
     def render(self, i):
         global star_01, star_02, enemies_destroyed
 
-        stddraw.clear(stddraw.BLACK)
-
         w = self.w
         h = self.h
-
-        # stddraw.picture(star_02, w//2, h//2, w, h)
 
         if self.is_in_menu:
             #self.sound_player.play_audio_background(GameSettings.intro_sound)
@@ -261,9 +255,14 @@ class Game:
         #elif self.success:
             #self.success_screen()
         elif self.enemies_destroyed == len(self.enemy_controller.enemy_list + self.enemy_controller.break_list):
-            self.sound_player.play_audio_background(GameSettings.victory_sound)
+            if self.sound_player.is_empty():
+                self.sound_player.play_audio_background(GameSettings.victory_sound)
+
             self.show_win_screen(i)
         else:
+            stddraw.clear(stddraw.BLACK)
+
+            stddraw.picture(star_02, w//2, h//2, w, h)
             self.game_loop(i)
 
     def success_screen(self):

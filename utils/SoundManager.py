@@ -25,6 +25,9 @@ class SoundPlayer:
         samples = stdaudio.read(filename.replace(".wav", ""))
         threading.Thread(target=self._mix_into_buffer, args=(samples,), daemon=True).start()
 
+    def is_empty(self):
+        return len(self.buffer) <= 1024
+
     def _mix_into_buffer(self, new_samples):
         with self.lock:
             # Extend buffer if needed

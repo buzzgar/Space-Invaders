@@ -9,20 +9,6 @@ import numpy as np
 import utils.utils
 from utils.utils import GameObject
 
-
-#from Gif import setup, draw_frames
-class Canvas:
-    def __init__(self, width, height):
-        self.w = width
-        self.h = height
-
-    def setup(self):
-        stddraw.setCanvasSize(700, 700)
-        stddraw.clear(stddraw.GRAY)
-        stddraw.setXscale(0.0, self.w)
-        stddraw.setYscale(0.0, self.w)
-
-
 class Missile(GameObject):
     def __init__(self, file, x, y, angle):
 
@@ -34,7 +20,7 @@ class Missile(GameObject):
 
         self.angle = np.radians(angle)
     def _draw(self):
-        #self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
+        self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
         stddraw.picture(self.pic, self.x, self.y)
 
         self.frame += 1
