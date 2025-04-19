@@ -17,8 +17,6 @@ from utils.utils import collides
 star_01 = picture.Picture("assets/spr_stars01.png")
 star_02 = picture.Picture("assets/spr_stars02.png")
 
-enemies_destroyed = 0  # tally enemy deaths
-
 
 class Game:
     MENU_SCREEN_FLAG = 100
@@ -32,6 +30,7 @@ class Game:
     MOVING_RIGHT = 1
 
     def __init__(self, w, h):
+        self.enemies_destroyed = None
         self.success = None
         self.hit_points = {}
         self.rotating_direction = None
@@ -63,8 +62,6 @@ class Game:
         self.is_in_menu = True
         self.is_player_dead = False
 
-        self.reset()
-
         self.intro_gif = Gif("menu", num_frames=5)
         self.fail_gif = Gif("fail", num_frames=2)
         self.win_gif = Gif("win", num_frames=4)
@@ -72,6 +69,8 @@ class Game:
         self.menu = TitleScreen(w, h)
 
         self.sound_player = SoundPlayer()
+
+        self.reset()
 
     def main_menu(self, i):
 
@@ -109,6 +108,9 @@ class Game:
                     self.reset()
 
     def reset(self):
+        if self.sound_player != None:
+            del self.sound_player
+
         self.is_in_menu = True
         self.is_player_dead = False
         self.success = False
@@ -126,9 +128,12 @@ class Game:
         self.hit_points = {}
 
         self.targert_hit_count = 0
+        self.enemies_destroyed = 0
+
+        self.sound_player = SoundPlayer()
 
     def game_loop(self, i):
-        global enemies_destroyed
+
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
 
@@ -195,15 +200,6 @@ class Game:
         stddraw.setFontSize(24)
         stddraw.text(self.w - 50, self.h - 20, f"♥ {self.player_lives}")
 
-        enemies_flag = False
-        for enemy in self.enemy_controller.enemy_list + self.enemy_controller.break_list:
-            if enemy.allow_draw:
-                enemies_flag = True
-                break
-
-        if not enemies_flag:
-            self.success = True
-
         for hit in self.hit_points:
             stddraw.setFontSize(12)
             if i - hit > GameSettings.hit_point_frame_time:
@@ -218,9 +214,11 @@ class Game:
 
             if collides(self.ground_level, enemy):
                 enemy.allow_draw = False
+                self.enemies_destroyed += 1
 
             if collides(self.shooter, enemy):
                 enemy.allow_draw = False
+                self.enemies_destroyed += 1
 
                 self.player_lives -= 1
 
@@ -238,7 +236,7 @@ class Game:
                 if collides(missile, enemy):
                     missile.allow_draw = False
                     enemy.allow_draw = False
-                    enemies_destroyed += 1
+                    self.enemies_destroyed += 1
                     self.targert_hit_count += 1
 
                     self.hit_points[i] = (enemy.x, enemy.y)
@@ -262,7 +260,7 @@ class Game:
             self.game_over(i)
         #elif self.success:
             #self.success_screen()
-        elif enemies_destroyed == len(self.enemy_controller.enemy_list):
+        elif self.enemies_destroyed == len(self.enemy_controller.enemy_list + self.enemy_controller.break_list):
             self.sound_player.play_audio_background(GameSettings.victory_sound)
             self.show_win_screen(i)
         else:

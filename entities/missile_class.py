@@ -34,7 +34,7 @@ class Missile(GameObject):
 
         self.angle = np.radians(angle)
     def _draw(self):
-        self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
+        #self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
         stddraw.picture(self.pic, self.x, self.y)
 
         self.frame += 1
