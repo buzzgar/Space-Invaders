@@ -11,7 +11,7 @@ intro_sound = "assets/sounds/intro_music"
 victory_sound = "assets/sounds/win_sound"
 
 enemy_sprite_path = "assets/pngegg.png"
-player_sprite_path = "assets/player1.txt"
+player_sprite_path = "assets/Player1.png"
 missile_sprite_path = "assets/laser.gif"
 
 FPS = 80
