@@ -91,8 +91,8 @@ def rotate_2d_array(array, angle_degrees):
 
     return rotated
 
-def rgb_to_int(rgb: color.Color):
-    r, g, b = (rgb.getRed(), rgb.getGreen(), rgb.getBlue())
+def rgb_to_int(rgb):
+    r, g, b = rgb
     return (r << 16) + (g << 8) + b
 
 def int_to_rgb(value):

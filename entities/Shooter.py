@@ -30,7 +30,7 @@ class Shooter(GameObject):
         self.x = self._x
         self.y = self._y
 
-        self._speed = 10
+        self._speed = GameSettings.player_speed
         self._delta_angle = GameSettings.player_angle_change
 
         self._angle = 0

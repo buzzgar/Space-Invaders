@@ -13,8 +13,8 @@ from menu import Gif, TitleScreen
 from utils.SoundManager import SoundPlayer
 from utils.utils import collides
 
-star_01 = picture.Picture("assets/spr_stars01.png")
-star_02 = picture.Picture("assets/spr_stars02.png")
+star_01 = picture.Picture("assets/game_backgrounds/spr_stars01.png")
+star_02 = picture.Picture("assets/game_backgrounds/spr_stars02.png")
 
 
 class Game:
@@ -61,15 +61,17 @@ class Game:
         self.is_in_menu = True
         self.is_player_dead = False
 
-        self.intro_gif = Gif("menu", 5, self.w//2, self.h//2)
-        self.fail_gif = Gif("fail", 2, self.w//2, self.h//2)
-        self.win_gif = Gif("win", 4, self.w//2, self.h//2)
+        self.intro_gif = Gif("assets/main_menu_background/menu", 5, self.w//2, self.h//2)
+        self.fail_gif = Gif("assets/end_game_screens/fail", 2, self.w//2, self.h//2)
+        self.win_gif = Gif("assets/end_game_screens/win", 4, self.w//2, self.h//2)
 
         self.menu = TitleScreen(w, h)
 
         self.sound_player = SoundPlayer()
 
         self.reset()
+
+        self.WIN_EVENT = False
 
     def main_menu(self, i):
 
@@ -107,9 +109,6 @@ class Game:
                     self.reset()
 
     def reset(self):
-        if self.sound_player is not None:
-            del self.sound_player
-
         self.is_in_menu = True
         self.is_player_dead = False
         self.success = False
@@ -128,7 +127,8 @@ class Game:
         self.target_hit_count = 0
         self.enemies_destroyed = 0
 
-        self.sound_player = SoundPlayer()
+        self.WIN_EVENT = False
+        self.sound_player.clear_buffer()
 
     def game_loop(self, i):
 
@@ -255,6 +255,10 @@ class Game:
         #elif self.success:
             #self.success_screen()
         elif self.enemies_destroyed == len(self.enemy_controller.enemy_list + self.enemy_controller.break_list):
+            if not self.WIN_EVENT:
+                self.WIN_EVENT = True
+                self.sound_player.clear_buffer()
+
             if self.sound_player.is_empty():
                 self.sound_player.play_audio_background(GameSettings.victory_sound)
 

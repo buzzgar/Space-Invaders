@@ -52,7 +52,7 @@ class EnemyController:
         self.enemy_list = []
 
         for i in range(0, enemy_count):
-            x, y = self.enemy_position_default(i, start_x, start_y)
+            x, y = self.enemy_position_striped(i, start_x, start_y)
 
             self.enemy_list.append(ClassicEnemy(
                 "enemy",

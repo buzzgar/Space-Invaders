@@ -10,9 +10,6 @@ from GameController import Game
 w = 1024
 h = 720
 
-star_01 = picture.Picture("assets/spr_stars01.png")
-star_02 = picture.Picture("assets/spr_stars02.png")
-
 b = 0
 
 game = Game(w, h)
@@ -43,6 +40,7 @@ if __name__ == '__main__':
         avg_fps = np.average(fps_lst[-21:-2])
 
         # Render FPS
+        stddraw.setFontSize(24)
         stddraw.setPenColor(stddraw.RED)
         stddraw.text(100, 100, "FPS: %.2f" % (
             avg_fps

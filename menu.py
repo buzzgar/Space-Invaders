@@ -1,16 +1,14 @@
 import stddraw
 import stdarray
-from picture import Picture  # picture class so can get widths and heights of picture for background
+from picture import Picture
 
 
 class Gif:
-    def __init__(self, name, num_frames, x_centre, y_centre):
+    def __init__(self, directory, num_frames, x_centre, y_centre):
         self.frames = stdarray.create1D(num_frames, "")  # create array to store each frame
-        self.name = name
-        for i in range(0, num_frames):  # populate array
-            self.frames[i] = Picture("assets/" + self.name + "_" + str(i + 1) + ".png")
 
-        self.dimensions = self.frames[0]  # set up standard dimensions for all frames
+        for i in range(0, num_frames):  # populate array
+            self.frames[i] = Picture(directory + "_" + str(i + 1) + ".png")
 
         self.x_centre = x_centre
         self.y_centre = y_centre
@@ -32,6 +30,7 @@ class TitleScreen:
     def instructions(self):
         stddraw.setPenColor(stddraw.WHITE)
         stddraw.setFontSize(50)
+
         stddraw.text(self.x_centre, self.h - 100, "COSMIC CONQUISTADORS")
         stddraw.setFontSize(28)
         stddraw.text(self.x_centre, self.h - 200, "Instructions:")

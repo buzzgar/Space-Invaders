@@ -19,12 +19,12 @@ class Missile(GameObject):
         super().__init__(None, x, y, self.pic.width(), self.pic.height(), None)
 
         self.angle = np.radians(angle)
+
     def _draw(self):
         self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
         stddraw.picture(self.pic, self.x, self.y)
 
         self.frame += 1
-
 
 class MissileController:
     def __init__(self, file, player_height, screen_width, screen_height):
