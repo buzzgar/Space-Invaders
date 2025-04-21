@@ -23,6 +23,9 @@ class PlayerProperties:
     fire_rate = GameSettings.fire_rate
     player_lives = 5
 
+    def __init__(self, sound_player: SoundPlayer):
+        self.sound_player = sound_player
+
     def default_fire_rate(self):
         self.fire_rate = GameSettings.fire_rate
 
@@ -40,6 +43,7 @@ class PlayerProperties:
                     self.fire_rate = modifier.fire_rate
                 elif modifier.modifier_type == modifier.HEALTH_MODIFIER:
                     self.player_lives += 1
+                    self.sound_player.play_audio_background(GameSettings.health_up_sound)
 
 class Game:
     MENU_SCREEN_FLAG = 100
@@ -144,7 +148,7 @@ class Game:
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
         self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
         self.modifier_controller = ModifierController(self.w, self.h)
-        self.player_properties = PlayerProperties()
+        self.player_properties = PlayerProperties(self.sound_player)
 
         self.moving_direction = 0
         self.rotating_direction = 0
@@ -243,6 +247,20 @@ class Game:
 
             if collides(modifier, self.shooter):
                 modifier.pick_up(i)
+
+        for drop in self.enemy_controller.get_active_drops():
+            if collides(drop, self.shooter):
+                drop.kill_enemy()
+
+                print(drop.x, drop.y, self.shooter.get_x(), self.shooter.get_y())
+
+                self.player_properties.player_lost_health()
+
+                if self.player_properties.player_lives == 0:
+                    self.is_player_dead = True
+                    self.sound_player.play_audio_background(GameSettings.game_over_sound)
+                else:
+                    self.sound_player.play_audio_background(GameSettings.player_lost_health)
 
         for enemy in self.enemy_controller.get_alive_enemies():
             if not enemy.allow_draw:

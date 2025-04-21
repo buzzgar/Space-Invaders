@@ -10,6 +10,10 @@ from utils.utils import GameObject
 
 class ClassicEnemy(GameObject):
 
+    CLASSIC_ENEMY = 0
+    FREEZE_ENEMY = 1
+    BOMB_ENEMY = 2
+
     def __init__(self, name, x, y, width, height, p):
         super().__init__(name, x, y, width, height, None)
         self.allow_draw = True
@@ -17,6 +21,8 @@ class ClassicEnemy(GameObject):
         self.p = p
 
         self.death_preview_frame = 12
+
+        self.enemy_type = self.CLASSIC_ENEMY
 
     def _draw(self):
         if self.death_preview_frame > 1 and not self.is_alive:
@@ -33,14 +39,53 @@ class ClassicEnemy(GameObject):
         self.is_alive = False
         self.is_destroyed = True
 
-class EnemyDrops(GameObject):
+class FreezeEnemy(ClassicEnemy):
 
     def __init__(self, name, x, y, width, height, p):
+        super().__init__(name, x, y, width, height, p)
+        self.enemy_type = self.FREEZE_ENEMY
+
+class BombEnemy(ClassicEnemy):
+
+    def __init__(self, name, x, y, width, height, p):
+        p = picture.Picture("assets/enemy/pngegg-bomb-dropper.png")
+
+        super().__init__(name, x, y, width, height, p)
+        self.enemy_type = self.BOMB_ENEMY
+
+    def draw(self):
+        super().draw()
+
+        if random.randint(0, 200) == 0 and self.is_alive:
+            return True
+
+class EnemyDrops(GameObject):
+
+    def __init__(self, name, x, y):
+
+        self.p = picture.Picture("assets/enemy/bomb.png")
+
+        print(x, y)
+
+        width = self.p.width()
+        height = self.p.height()
+
         super().__init__(name, x, y, width, height, None)
+
         self.allow_draw = True
-        self.p = p
+        self.is_alive = True
+
+        self.bomb_preview_frame = 12
 
     def _draw(self):
+
+        if self.bomb_preview_frame > 1 and not self.is_alive:
+            self.bomb_preview_frame -= 1
+        elif not self.is_alive:
+            self.allow_draw = False
+
+        if not self.is_alive:
+            self.p = picture.Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.bomb_preview_frame))
 
         stddraw.picture(self.p, self.x, self.y, self.width, self.height)
 
@@ -82,16 +127,27 @@ class EnemyController:
         for i in range(0, enemy_count):
             x, y = self.enemy_position_striped(i, start_x, start_y)
 
-            self.enemy_list.append(ClassicEnemy(
-                "enemy",
-                x,
-                y,
-                self.enemy_width,
-                self.enemy_height,
-                p)
-            )
+            if i % 36 > 0:
+                self.enemy_list.append(ClassicEnemy(
+                    "enemy",
+                    x,
+                    y,
+                    self.enemy_width,
+                    self.enemy_height,
+                    p)
+                )
+            else:
+                self.enemy_list.append(BombEnemy(
+                    "enemy",
+                    x,
+                    y,
+                    self.enemy_width,
+                    self.enemy_height,
+                    p)
+                )
 
         self.break_list = []
+        self.drop_list = []
 
     def get_alive_enemies(self, include_breaks=True):
 
@@ -99,6 +155,9 @@ class EnemyController:
             return [enemy for enemy in self.enemy_list if enemy.is_alive]
 
         return [enemy for enemy in self.enemy_list + self.break_list if enemy.is_alive]
+
+    def get_active_drops(self):
+        return [drop for drop in self.drop_list if drop.is_alive]
 
     def enemy_position_default(self, i, start_x, start_y):
 
@@ -132,7 +191,7 @@ class EnemyController:
             else:
                 enemy.x -= GameSettings.alien_speed_x
 
-        for enemy in self.get_alive_enemies():
+        for enemy in self.get_alive_enemies(False):
 
             if enemy.x >= self.w - self.enemy_width:
                 self.direction = self.LEFT
@@ -143,6 +202,9 @@ class EnemyController:
                 self.direction = self.RIGHT
                 move_down = True
                 break
+
+        for drop in self.drop_list:
+            drop.y -= 10
 
         if random.randint(0, 300) == 0:
             if len(self.get_alive_enemies()) > 0:
@@ -160,7 +222,13 @@ class EnemyController:
 
     def render(self):
         for enemy in self.enemy_list:
-            enemy.draw()
+            drop = enemy.draw()
+
+            if drop:
+                self.drop_list.append(EnemyDrops("drop", enemy.x, enemy.y))
+
+        for drop in self.drop_list:
+            drop.draw()
 
         for enemy in self.break_list:
             enemy.draw()
