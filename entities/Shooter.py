@@ -104,7 +104,7 @@ class Shooter(GameObject):
         for i in range(len(self._shooter)):
             for j in range(len(self._shooter[0])):
                 color = self._shooter[i][j]
-                if (color.getRed(),color.getGreen(),color.getBlue()) != (0,0,0): 
+                if (color.getRed(),color.getGreen(),color.getBlue()) != (0,0,0):
                     x = self._x + j * self._pixelWidth
                     y = self._y + (len(self._shooter) - i - 1) * self._pixelHeight
                 
@@ -131,13 +131,16 @@ class Shooter(GameObject):
         for i in range(pic.height()):
             for j in range(pic.width()):
                 color = pic.get(j,i)
-                picMatrix[i][j] =  color
+                picMatrix[i][j] = color
 
         return picMatrix
 
 
     def drawShooter(self):
         self._draw()
+
+    def died(self):
+        pass
 
 
     

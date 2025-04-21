@@ -54,9 +54,14 @@ class EnemyController:
     RIGHT = 0
     LEFT = 1
 
-    def __init__(self, w, h, enemy_count=36):
+    def __init__(self, w, h, enemy_count=36, wave=1):
         self.w = w
         self.h = h
+
+        enemy_count = enemy_count * wave
+        self.enemy_count = enemy_count
+
+        self.wave = wave
 
         self.max_per_row = 8
 
@@ -88,8 +93,12 @@ class EnemyController:
 
         self.break_list = []
 
-    def get_alive_enemies(self):
-        return [enemy for enemy in self.enemy_list if enemy.allow_draw]
+    def get_alive_enemies(self, include_breaks=True):
+
+        if not include_breaks:
+            return [enemy for enemy in self.enemy_list if enemy.is_alive]
+
+        return [enemy for enemy in self.enemy_list + self.break_list if enemy.is_alive]
 
     def enemy_position_default(self, i, start_x, start_y):
 
@@ -97,12 +106,13 @@ class EnemyController:
                 start_y - (i // self.max_per_row) * (10 + self.enemy_height))
 
     def enemy_position_striped(self, i, start_x, start_y):
+        repeat = 36
 
         x = self.w - start_x * 2
 
         max_per_stripe = x // 2 // self.enemy_width
 
-        y = start_y + self.enemy_height * (i//max_per_stripe)
+        y = start_y + self.enemy_height * (i//max_per_stripe) + i // max_per_stripe * 100
 
         i = i % max_per_stripe
 
@@ -116,7 +126,7 @@ class EnemyController:
 
         move_down = False
 
-        for enemy in self.get_alive_enemies():
+        for enemy in self.get_alive_enemies(False):
             if self.direction == self.RIGHT:
                 enemy.x += GameSettings.alien_speed_x
             else:
@@ -134,9 +144,9 @@ class EnemyController:
                 move_down = True
                 break
 
-        if random.randint(0, 1000) == 0:
+        if random.randint(0, 300) == 0:
             if len(self.get_alive_enemies()) > 0:
-                pass #self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
+                self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
 
         if move_down:
             for enemy in self.enemy_list:

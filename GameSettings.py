@@ -1,17 +1,17 @@
 alien_speed_x = 20
 alien_speed_y = 10
 
-fire_rate = 0.01
+fire_rate = 1.2
 
 hit_point_frame_time = 20
 
-gun_fire_sound = "assets/sounds/laser-zap-fx_C_minor"
+gun_fire_sound = "assets/sounds/blast-101soundboard"
 game_over_sound = "assets/sounds/Game_Over"
 intro_sound = "assets/sounds/intro_music"
 victory_sound = "assets/sounds/win_sound"
 
 enemy_sprite_path = "assets/enemy/pngegg.png"
-player_sprite_path = "assets/shooter/Player1.png"
+player_sprite_path = "assets/shooter/space-game-low-res.png"
 missile_sprite_path = "assets/shooter/laser.gif"
 
 FPS = 60

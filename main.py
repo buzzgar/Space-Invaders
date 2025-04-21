@@ -40,11 +40,11 @@ if __name__ == '__main__':
         avg_fps = np.average(fps_lst[-21:-2])
 
         # Render FPS
-        stddraw.setFontSize(24)
-        stddraw.setPenColor(stddraw.RED)
-        stddraw.text(100, 100, "FPS: %.2f" % (
-            avg_fps
-        ))
+        # stddraw.setFontSize(24)
+        # stddraw.setPenColor(stddraw.RED)
+        # stddraw.text(100, 100, "FPS: %.2f" % (
+        #     avg_fps
+        # ))
 
         stddraw.show(max(sleep_time * 1000, 0))
 
