@@ -13,8 +13,8 @@ from menu import Gif, TitleScreen
 from utils.SoundManager import SoundPlayer
 from utils.utils import collides
 
-star_01 = picture.Picture("assets/game_backgrounds/spr_stars01.png")
-star_02 = picture.Picture("assets/game_backgrounds/spr_stars02.png")
+star_01 = picture.Picture("assets/game_backgrounds/back.png")
+star_02 = picture.Picture("assets/game_backgrounds/back.png")
 
 
 class Game:
@@ -80,7 +80,7 @@ class Game:
 
             return True
 
-        self.intro_gif.draw_frame((i // 5) % 5)
+        self.intro_gif.draw_frame((i // 8) % 5)
         self.menu.instructions()
 
         return False
@@ -211,11 +211,11 @@ class Game:
                 continue
 
             if collides(self.ground_level, enemy):
-                enemy.allow_draw = False
+                enemy.kill_enemy()
                 self.enemies_destroyed += 1
 
             if collides(self.shooter, enemy):
-                enemy.allow_draw = False
+                enemy.kill_enemy()
                 self.enemies_destroyed += 1
 
                 self.player_lives -= 1
@@ -223,6 +223,8 @@ class Game:
                 if self.player_lives == 0:
                     self.is_player_dead = True
                     self.sound_player.play_audio_background(GameSettings.game_over_sound)
+                else:
+                    self.sound_player.play_audio_background(GameSettings.player_lost_health)
 
             for missile in self.missile_controller.missile:
                 if not missile:
@@ -233,7 +235,7 @@ class Game:
 
                 if collides(missile, enemy):
                     missile.allow_draw = False
-                    enemy.allow_draw = False
+                    enemy.kill_enemy()
                     self.enemies_destroyed += 1
                     self.target_hit_count += 1
 
@@ -260,6 +262,7 @@ class Game:
                 self.sound_player.clear_buffer()
 
             if self.sound_player.is_empty():
+                self.sound_player.clear_buffer()
                 self.sound_player.play_audio_background(GameSettings.victory_sound)
 
             self.show_win_screen(i)
@@ -277,3 +280,6 @@ class Game:
             match userInput:
                 case 'R' | 'r':
                     self.reset()
+
+    def render_help(self):
+        pass

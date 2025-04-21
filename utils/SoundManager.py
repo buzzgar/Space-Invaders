@@ -28,6 +28,10 @@ class SoundPlayer:
     def play_audio_background(self, filename):
         if self.sound_history.get(filename):
             samples = self.sound_history[filename]
+
+            if len(samples) < 1024:
+                samples = samples + [0] * (1100 - len(samples))
+
             threading.Thread(target=self._mix_into_buffer, args=(samples,), daemon=True).start()
             return
 

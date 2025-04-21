@@ -5,7 +5,7 @@ fire_rate = 0.01
 
 hit_point_frame_time = 20
 
-gun_fire_sound = "assets/sounds/blast-101soundboard"
+gun_fire_sound = "assets/sounds/laser-zap-fx_C_minor"
 game_over_sound = "assets/sounds/Game_Over"
 intro_sound = "assets/sounds/intro_music"
 victory_sound = "assets/sounds/win_sound"
@@ -18,3 +18,5 @@ FPS = 60
 
 player_angle_change = 2
 player_speed = 20
+
+player_lost_health = "assets/sounds/roblox-death-sound-effect"

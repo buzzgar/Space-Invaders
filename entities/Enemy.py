@@ -13,6 +13,31 @@ class ClassicEnemy(GameObject):
     def __init__(self, name, x, y, width, height, p):
         super().__init__(name, x, y, width, height, None)
         self.allow_draw = True
+        self.is_alive = True
+        self.p = p
+
+        self.death_preview_frame = 12
+
+    def _draw(self):
+        if self.death_preview_frame > 1 and not self.is_alive:
+            self.death_preview_frame -= 1
+        elif not self.is_alive:
+            self.allow_draw = False
+
+        if not self.is_alive:
+            self.p = picture.Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.death_preview_frame))
+
+        stddraw.picture(self.p, self.x, self.y, self.width, self.height)
+
+    def kill_enemy(self):
+        self.is_alive = False
+        self.is_destroyed = True
+
+class EnemyDrops(GameObject):
+
+    def __init__(self, name, x, y, width, height, p):
+        super().__init__(name, x, y, width, height, None)
+        self.allow_draw = True
         self.p = p
 
     def _draw(self):
@@ -23,8 +48,6 @@ class ClassicEnemy(GameObject):
         self.is_alive = False
         self.allow_draw = False
         self.is_destroyed = True
-
-
 
 class EnemyController:
 
@@ -65,6 +88,9 @@ class EnemyController:
 
         self.break_list = []
 
+    def get_alive_enemies(self):
+        return [enemy for enemy in self.enemy_list if enemy.allow_draw]
+
     def enemy_position_default(self, i, start_x, start_y):
 
         return (start_x + (i % self.max_per_row) * (10 + self.enemy_width) + (50 if (i % self.max_per_row) > 7 else 0),
@@ -81,23 +107,22 @@ class EnemyController:
         i = i % max_per_stripe
 
         if i > 0:
-            x -= self.enemy_width * (i//2) * (1 if i % 2 == 0 else -1)
-            y -= self.enemy_height * (i//2)
+            x -= self.enemy_width * ((i + 1)//2) * (1 if i % 2 == 0 else -1)
+            y -= self.enemy_height * (i//2) + self.enemy_height * (0 if i % 2 == 0 else 1)
 
-        print(x, y)
         return x, y
 
     def step(self):
 
         move_down = False
 
-        for enemy in self.enemy_list:
+        for enemy in self.get_alive_enemies():
             if self.direction == self.RIGHT:
                 enemy.x += GameSettings.alien_speed_x
             else:
                 enemy.x -= GameSettings.alien_speed_x
 
-        for enemy in self.enemy_list:
+        for enemy in self.get_alive_enemies():
 
             if enemy.x >= self.w - self.enemy_width:
                 self.direction = self.LEFT
@@ -109,9 +134,9 @@ class EnemyController:
                 move_down = True
                 break
 
-        if random.randint(0, 100) == 0:
-            if len(self.enemy_list) > 0:
-                self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
+        if random.randint(0, 1000) == 0:
+            if len(self.get_alive_enemies()) > 0:
+                pass #self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
 
         if move_down:
             for enemy in self.enemy_list:
