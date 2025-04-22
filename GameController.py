@@ -18,13 +18,14 @@ from utils.utils import collides
 star_01 = picture.Picture("assets/game_backgrounds/back.png")
 star_02 = picture.Picture("assets/game_backgrounds/back.png")
 
-class PlayerProperties:
+class GameProperties:
 
     fire_rate = GameSettings.fire_rate
     player_lives = 5
 
-    def __init__(self, sound_player: SoundPlayer):
+    def __init__(self, sound_player: SoundPlayer, enemy_controller: EnemyController):
         self.sound_player = sound_player
+        self.enemy_controller = enemy_controller
 
     def default_fire_rate(self):
         self.fire_rate = GameSettings.fire_rate
@@ -33,6 +34,9 @@ class PlayerProperties:
         self.player_lives -= 1
 
     def apply_modifiers(self, i, modifiers: List[Modifier]):
+
+        self.enemy_controller.frozen = False
+
         for modifier in modifiers:
             if not modifier.is_picked_up:
                 continue
@@ -44,6 +48,9 @@ class PlayerProperties:
                 elif modifier.modifier_type == modifier.HEALTH_MODIFIER:
                     self.player_lives += 1
                     self.sound_player.play_audio_background(GameSettings.health_up_sound)
+                elif modifier.modifier_type == modifier.FROZEN_MODIFIER:
+                    self.enemy_controller.frozen = True
+
 
 class Game:
     MENU_SCREEN_FLAG = 100
@@ -57,7 +64,7 @@ class Game:
     MOVING_RIGHT = 1
 
     def __init__(self, w, h):
-        self.player_properties: PlayerProperties = None
+        self.game_properties: GameProperties = None
         self.modifier_controller: ModifierController = None
         self.enemies_destroyed = None
         self.success = None
@@ -148,7 +155,7 @@ class Game:
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
         self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
         self.modifier_controller = ModifierController(self.w, self.h)
-        self.player_properties = PlayerProperties(self.sound_player)
+        self.game_properties = GameProperties(self.sound_player, self.enemy_controller)
 
         self.moving_direction = 0
         self.rotating_direction = 0
@@ -163,8 +170,8 @@ class Game:
         self.sound_player.clear_buffer()
 
     def game_loop(self, i):
-        self.player_properties.default_fire_rate()
-        self.player_properties.apply_modifiers(i, self.modifier_controller.get_modifiers())
+        self.game_properties.default_fire_rate()
+        self.game_properties.apply_modifiers(i, self.modifier_controller.get_modifiers())
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -202,7 +209,7 @@ class Game:
 
             if i > 0:  # check if new missile is being called, then creates it
 
-                if time.time() - self.last_shot_fired > self.player_properties.fire_rate:
+                if time.time() - self.last_shot_fired > self.game_properties.fire_rate:
                     self.last_shot_fired = time.time()
                     angle = int(round(self.shooter.get_angle() * 180 / math.pi, 5))
 
@@ -233,7 +240,7 @@ class Game:
 
         stddraw.setPenColor(stddraw.RED)
         stddraw.setFontSize(24)
-        stddraw.text(self.w - 50, self.h - 20, f"♥ {self.player_properties.player_lives}")
+        stddraw.text(self.w - 50, self.h - 20, f"♥ {self.game_properties.player_lives}")
 
         for hit in self.hit_points:
             stddraw.setFontSize(12)
@@ -260,6 +267,7 @@ class Game:
 
                 if collides(missile, drop):
                     drop.kill_enemy()
+                    missile.allow_draw = False
 
             if collides(drop, self.ground_level):
                 drop.kill_enemy()
@@ -267,9 +275,9 @@ class Game:
             if collides(drop, self.shooter):
                 drop.kill_enemy()
 
-                self.player_properties.player_lost_health()
+                self.game_properties.player_lost_health()
 
-                if self.player_properties.player_lives == 0:
+                if self.game_properties.player_lives == 0:
                     self.is_player_dead = True
                     self.sound_player.play_audio_background(GameSettings.game_over_sound)
                 else:
@@ -287,9 +295,9 @@ class Game:
                 enemy.kill_enemy()
                 self.enemies_destroyed += 1
 
-                self.player_properties.player_lost_health()
+                self.game_properties.player_lost_health()
 
-                if self.player_properties.player_lives == 0:
+                if self.game_properties.player_lives == 0:
                     self.is_player_dead = True
                     self.sound_player.play_audio_background(GameSettings.game_over_sound)
                 else:

@@ -10,6 +10,7 @@ class Modifier(GameObject):
 
     HEALTH_MODIFIER = 0
     FIRE_RATE_MODIFIER = 1
+    FROZEN_MODIFIER = 2
 
     def __init__(self, x, y, filename):
         self.pic = Picture(filename)
@@ -68,6 +69,14 @@ class FireRateModifier(Modifier):
 
         self.modifier_type = Modifier.FIRE_RATE_MODIFIER
 
+class FreezeModifier(Modifier):
+    def __init__(self, x, y, filename):
+        super().__init__(x, y, filename)
+
+        self.allowed_time_use = 5
+
+        self.modifier_type = Modifier.FROZEN_MODIFIER
+
 class ModifierController:
     def __init__(self, screen_width, screen_height):
         self.modifiers = []
@@ -80,9 +89,14 @@ class ModifierController:
             self.modifiers.append(FireRateModifier(
                 randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/bullets-36.png"))
 
-        if randint(0, 500) == 0:
+        if randint(0, 800) == 0:
             self.modifiers.append(HealthUpModifier(
                 randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/heart-plus-36.png"))
+
+        if randint(0, 1500) == 0:
+            self.modifiers.append(FreezeModifier(
+                randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/ice-bolt-48.png"))
+
 
         for modifier in self.modifiers:
             modifier.y -= 5

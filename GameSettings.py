@@ -21,5 +21,7 @@ player_speed = 20
 
 player_lost_health = "assets/sounds/roblox-death-sound-effect"
 
-
 health_up_sound = "assets/sounds/mixkit-video-game-health-recharge-2837.wav"
+
+WIDTH = 1024
+HEIGHT = 720
