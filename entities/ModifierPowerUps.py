@@ -1,0 +1,92 @@
+from random import randint
+
+import stddraw
+from picture import Picture
+
+import GameSettings
+from utils.utils import GameObject
+
+class Modifier(GameObject):
+
+    HEALTH_MODIFIER = 0
+    FIRE_RATE_MODIFIER = 1
+
+    def __init__(self, x, y, filename):
+        self.pic = Picture(filename)
+        width = self.pic.width()
+        height = self.pic.height()
+
+        super().__init__("Modifier PowerUps", x, y, width, height, None)
+        self.allow_draw = True
+
+        self.is_picked_up = False
+        self.frame_used = -1
+
+        self.allowed_time_use = 5
+
+        self.uses = 1
+
+        self.modifier_type = None
+
+    def _draw(self):
+        stddraw.picture(self.pic, self.x, self.y, self.width, self.height)
+
+    def pick_up(self, i):
+        self.is_picked_up = True
+        self.allow_draw = False
+        self.frame_used = i
+
+    def is_active(self, i):
+        if self.allowed_time_use == -1:
+            if self.uses > 0:
+                self.uses -= 1
+                return True
+            return False
+
+        if i - self.frame_used > self.allowed_time_use * GameSettings.FPS:
+            return False
+        return True
+
+
+class HealthUpModifier(Modifier):
+    def __init__(self, x, y, filename):
+        super().__init__(x, y, filename)
+
+        self.health_delta = 1
+        self.allowed_time_use = -1
+
+        self.uses = 2
+
+        self.modifier_type = Modifier.HEALTH_MODIFIER
+
+class FireRateModifier(Modifier):
+    def __init__(self, x, y, filename):
+        super().__init__(x, y, filename)
+
+        self.fire_rate = 0.1
+        self.allowed_time_use = 3
+
+        self.modifier_type = Modifier.FIRE_RATE_MODIFIER
+
+class ModifierController:
+    def __init__(self, screen_width, screen_height):
+        self.modifiers = []
+
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+
+    def frame_render(self, i):
+        if randint(0, 500) == 0:
+            self.modifiers.append(FireRateModifier(
+                randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/bullets-36.png"))
+
+        if randint(0, 500) == 0:
+            self.modifiers.append(HealthUpModifier(
+                randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/heart-plus-36.png"))
+
+        for modifier in self.modifiers:
+            modifier.y -= 5
+            modifier.draw()
+
+    def get_modifiers(self) -> list:
+        return self.modifiers

@@ -1,4 +1,6 @@
+import color
 import stddraw
+import stdio
 import stdarray
 from picture import Picture
 import math
@@ -67,12 +69,12 @@ class Missile(GameObject):
         super().__init__(None, x, y, self.pic.width(), self.pic.height(), None)
 
         self.angle = np.radians(angle)
+
     def _draw(self):
         self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
         stddraw.picture(self.pic, self.x, self.y)
 
         self.frame += 1
-
 
 class MissileController:
     def __init__(self, file, player_height, screen_width, screen_height):
@@ -90,9 +92,10 @@ class MissileController:
         self.y = y
         self.angle = angle
 
-        self.file = ("assets/missile/angle_" + str(self.angle))
-        self.x -= math.sin(np.radians(self.angle)) * self.h / 2
-        self.y -= self.h / 2 - (math.cos(np.radians(angle)) * self.h / 2)
+        self.file = ("assets/missile/angle_" + str(angle))
+
+        self.x -= math.sin(np.radians(angle)) * self.h / 2
+        self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
         if self.num_missiles < 500:
             self.missile[self.num_missiles] = Missile(self.file, self.x, self.y, self.angle)
             self.missile[self.num_missiles].allow_draw = True

@@ -1,7 +1,7 @@
-alien_speed_x = 10
+alien_speed_x = 20
 alien_speed_y = 10
 
-fire_rate = 0.01
+fire_rate = 1.2
 
 hit_point_frame_time = 20
 
@@ -10,10 +10,16 @@ game_over_sound = "assets/sounds/Game_Over"
 intro_sound = "assets/sounds/intro_music"
 victory_sound = "assets/sounds/win_sound"
 
-enemy_sprite_path = "assets/pngegg.png"
-player_sprite_path = "assets/player1.txt"
-missile_sprite_path = "assets/laser.gif"
+enemy_sprite_path = "assets/enemy/pngegg.png"
+player_sprite_path = "assets/shooter/space-game-low-res.png"
+missile_sprite_path = "assets/shooter/laser.gif"
 
-FPS = 80
+FPS = 60
 
-player_angle_change = 1
+player_angle_change = 2
+player_speed = 20
+
+player_lost_health = "assets/sounds/roblox-death-sound-effect"
+
+
+health_up_sound = "assets/sounds/mixkit-video-game-health-recharge-2837.wav"
