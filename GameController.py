@@ -249,10 +249,23 @@ class Game:
                 modifier.pick_up(i)
 
         for drop in self.enemy_controller.get_active_drops():
-            if collides(drop, self.shooter):
+
+            for missile in self.missile_controller.missile:
+
+                if not missile:
+                    continue
+
+                if not missile.allow_draw:
+                    continue
+
+                if collides(missile, drop):
+                    drop.kill_enemy()
+
+            if collides(drop, self.ground_level):
                 drop.kill_enemy()
 
-                print(drop.x, drop.y, self.shooter.get_x(), self.shooter.get_y())
+            if collides(drop, self.shooter):
+                drop.kill_enemy()
 
                 self.player_properties.player_lost_health()
 

@@ -65,8 +65,6 @@ class EnemyDrops(GameObject):
 
         self.p = picture.Picture("assets/enemy/bomb.png")
 
-        print(x, y)
-
         width = self.p.width()
         height = self.p.height()
 
@@ -91,7 +89,6 @@ class EnemyDrops(GameObject):
 
     def kill_enemy(self):
         self.is_alive = False
-        self.allow_draw = False
         self.is_destroyed = True
 
 class EnemyController:
@@ -204,7 +201,8 @@ class EnemyController:
                 break
 
         for drop in self.drop_list:
-            drop.y -= 10
+            if drop.is_alive:
+                drop.y -= 10
 
         if random.randint(0, 300) == 0:
             if len(self.get_alive_enemies()) > 0:
