@@ -1,104 +1,56 @@
-### **📜 Cosmic Conquistadors - README**  
+# Cosmic Conquestors
 
-# 🌌 Cosmic Conquistadors - Group Project
+## Title Screen
+- Lists game controls
+- Title screen displays a fun background animation
+- Press any key to move on to game screen
 
-## 📌 Project Overview  
-Cosmic Conquistadors is a **Space Invaders-inspired** game developed for **Computer Science E214 (2025)**.  
+## Game Screen
+### Entities
+#### Shooter
+- Shooter slides left and right until stop key pressed or at bounderies.
+- Shooter has 180 degrees of freedom and can rotate clockwise and anti-clockwise when respective keys are pressed. 
+- 
 
-**🗓 Deadline:** April 25, 2025, at 11:59 AM (SunLearn Submission)  
-**🎮 Demo Date:** April 29, 2025 (Compulsory)  
+#### Enemies
 
----
+#### Missile
 
-## 🎯 Goals & Minimum Requirements (60%)  
-To score the **minimum 60%**, the game must have:  
+#### Head-up display
 
-- [ ] **Title Screen** with instructions (Press `Space` to start).  
-- [ ] **Shooter movement** (left & right) within screen boundaries.  
-- [ ] **Turret rotation** (cannot aim below horizontal).  
-- [ ] **Missiles fire** from the turret at an angle.  
-- [ ] **Enemies move in a grid**, shifting left-right and descending.  
-- [ ] **Missile collision detection** (destroy enemy on hit).  
-- [ ] **Score display** (increases when enemies are destroyed).  
-- [ ] **Game Over conditions**:  
-  - [ ] Win when all enemies are destroyed.  
-  - [ ] Lose if an enemy reaches the ground or touches the shooter.  
-  - [ ] "Game Over" screen appears before restart.  
-- [ ] **Game restarts** automatically after a short delay.  
-- [ ] **Quit option (`q` key)** to exit the game.  
+## End Game Screen
 
----
+## Advanced Additional Features
+- Added lives
+- Added enemies that can drop bombs
+- Added power ups, like fire rate, health and freeze enemies.
+- Added shield to protect player
+- Added custom images and sounds, to  all entities.
+- Added animations
+	- Title screen background
+	- Explosion animation when entities dies
+	- 
 
-## 🏆 Bonus Features (Extra 40%)  
-To maximize the **final 100% score**, add these enhancements:  
+## Sources
+### Image and Audio resources
+| Sources                              | Link                                                   | Type            |
+| ------------------------------------ | ------------------------------------------------------ | --------------- |
+| `assets/enemy/enemy-sprite.png`      | https://www.pngegg.com/en/png-yqvtx                    | Enemy Image     |
+| `assets/shooter/shooter-sprite.png`  | https://www.flaticon.com/free-icon/space-game_18448645 | Player Image    |
+| `assets/game_backgrounds/back.png`   | https://opengameart.org/content/space-background-1     | Game background |
+| `assets/sounds/health-recharge.wav`  | https://mixkit.co/free-sound-effects/discover/health/  | Player Sound    |
+| `assets/enemy/explosion`             | https://th.picmix.com/stamp/Game-Fire-2483872          | Explosion gif   |
+| `assets/enemy/bomb.png`              | https://cdn-icons-png.flaticon.com/512/595/595582.png  | Bomb Image      |
+| `assets/modifiers/ice-bolt-48.png`   | https://game-icons.net/1x1/zeromancer/heart-plus.html  | Modifier Icon   |
+| `assets/modifiers/heart-plus-36.png` | https://game-icons.net/1x1/lorc/bullets.html           | Modifier Icon   |
+| `assets/modifiers/ice-bolt-48.png`   | https://game-icons.net/1x1/lorc/ice-bolt.html          | Modifier Icon   |
+| `assets/sounds/explosion-2.wav`      | https://uppbeat.io/sfx/explosion-in-tight-space/53/723 | Explosion sound |
+| assets/sounds/shield_activate_sound | https://pixabay.com/sound-effects/sword-slash-with-metal-shield-impact-185433/ | Shield Sound | 
+| assets/sounds/shield_guard_sound | https://pixabay.com/sound-effects/shield-guard-6963/ | Shield Sound |
+| assets/shield_resized.png | https://www.vecteezy.com/png/56768885-delicate-soap-bubble-with-inner-spheres-and-glossy-surface |  Shield Image |
+| assets/laser.gif | https://www.artstation.com/artwork/aorZ0L | Missile Animation | 
+| assets/sounds/blast-101soundboard.wav | https://pixabay.com/sound-effects/laser-gun-81720/ | Missile Sound | 
+| assets/sounds/win_sound.wav | https://pixabay.com/sound-effects/goodresult-82807/ | Victory Sound | 
+| assets/sounds/Game_Over.wav | https://mixkit.co/free-sound-effects/space-shooter/ | Game Over Sound | 
 
-### 🎨 **Visual & UI Improvements**  
-- [ ] Improved **graphics & animations** (custom sprites, effects).  
-- [ ] Enhanced **background & UI elements**.  
-
-### 🔊 **Audio Enhancements**  
-- [ ] **Sound effects** for shooting & enemy destruction.  
-- [ ] **Background music** for better immersion.  
-
-### ⚔️ **Gameplay Upgrades**  
-- [ ] **High score leaderboard** displayed after game over.  
-- [ ] **Progressive difficulty** (faster enemies, more aggressive AI).  
-- [ ] **Multiple lives** & increasing challenge per level.  
-- [ ] **Two-player mode** (competitive or co-op).  
-- [ ] **Enemies counterattack** (drop bombs).  
-- [ ] **Bunkers & shields** for defense.  
-- [ ] **Power-ups** (faster shooting, stronger missiles).  
-
----
-
-## 🔧 Development Plan  
-
-### ✅ **Phase 1: Core Mechanics (Weeks 1-3)**
-- [ ] Implement **title screen & UI**.  
-- [ ] Create **basic shooter movement**.  
-- [ ] Implement **basic enemy behavior** (movement & descent).  
-
-### 🚀 **Phase 2: Game Logic (Weeks 4-5)**  
-- [ ] Implement **OOP structure** (Shooter, Enemies, Missiles as objects).  
-- [ ] Add **scoring system & win/loss conditions**.  
-- [ ] Implement **missile collision detection**.  
-
-### 🎨 **Phase 3: Enhancements & Polish (Final Weeks)**  
-- [ ] Improve **graphics & animations**.  
-- [ ] Add **sound effects & music**.  
-- [ ] Test & **debug for final optimizations**.  
-- [ ] Integrate **bonus features if time allows**.  
-
----
-
-## 🚀 Running the Project  
-
-### **🔹 Prerequisites**  
-- **Python 3.x**  
-- **stddraw & stdaudio libraries** (No `pygame` or external dependencies).  
-
-### **🔸 How to Run**  
-1️⃣ Clone the repository:  
-```sh
-git clone https://github.com/your-repo/cosmic-conquistadors.git
-cd cosmic-conquistadors
-```
-
-2️⃣ Run the game:  
-```sh
-python main.py
-```
-3️⃣ Controls:  
-| Key  | Action |
-|------|--------|
-| `←` / `→` | Move Shooter Left/Right |
-| `A` / `D` | Rotate Turret |
-| `Space` | Shoot Missile |
-| `Q` | Quit Game |
-
----
-
-## ⚠️ Important Notes  
-❗ **Plagiarism checks will be conducted**, so each section of code must include comments on **who contributed**.  
-❗ **The project is tested in FIRGA**, so stick to **allowed libraries**.  
-❗ **The April 29 demo is compulsory** – missing it results in **zero marks**.  
+### ChatGPT Prompts
