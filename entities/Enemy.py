@@ -28,6 +28,7 @@ class ClassicEnemy(GameObject):
         self.frozen_pic = picture.Picture("assets/enemy/frozen-enemy.png")
 
     def _draw(self):
+
         if self.death_preview_frame > 1 and not self.is_alive:
             self.death_preview_frame -= 1
         elif not self.is_alive:
