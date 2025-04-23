@@ -1,3 +1,8 @@
+################################################
+# Student Name: Meezaan Ryklief
+# Student Number: 26031825
+################################################
+
 from random import randint
 
 import stddraw
@@ -85,6 +90,9 @@ class ModifierController:
         self.screen_height = screen_height
 
     def frame_render(self, i):
+        # Renders all modifiers/powerups on the screen
+        # Also enables new modifiers to spawn randomly
+
         if randint(0, 500) == 0:
             self.modifiers.append(FireRateModifier(
                 randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/bullets-36.png"))

@@ -1,5 +1,12 @@
+################################################
+# Student Name: Ayesha Hofmeyer
+# Student Number: 26990571
+################################################
+
+import stdarray
 import stddraw
-from menu import Gif
+from picture import Picture
+
 
 class Gif:
     def __init__(self, name, num_frames):

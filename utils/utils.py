@@ -1,6 +1,10 @@
+################################################
+# Student Name: Meezaan Ryklief
+# Student Number: 26031825
+################################################
+
 import math
 
-import color
 import stdaudio
 
 import GameSettings

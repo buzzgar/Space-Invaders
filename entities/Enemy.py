@@ -1,3 +1,8 @@
+################################################
+# Student Name: Meezaan Ryklief
+# Student Number: 26031825
+################################################
+
 import math
 import random
 
@@ -194,6 +199,8 @@ class EnemyController:
 
     def step(self):
 
+        # Check how many enemies are on the screen
+
         enemies_on_screen = 0
 
         for enemy in self.get_alive_enemies(True):
@@ -201,24 +208,29 @@ class EnemyController:
             if 0 < enemy.y < self.h and 0 < enemy.x < self.w:
                 enemies_on_screen += 1
 
+        # if less than 5, don't freeze
         if enemies_on_screen < 5:
             self.frozen = False
 
+        # Update the positions of all the bombs if alive/active
         for drop in self.drop_list:
             if drop.is_alive:
                 drop.y -= 10
 
+        # If enemies are frozen don't update any positions and return
         if self.frozen:
             return
 
         move_down = False
 
+        # Update enemy x positions that are alive and have not broken formation
         for enemy in self.get_alive_enemies(False):
             if self.direction == self.RIGHT:
                 enemy.x += GameSettings.alien_speed_x
             else:
                 enemy.x -= GameSettings.alien_speed_x
 
+        # Checks if any enemy is at boundary, then change direction and move down
         for enemy in self.get_alive_enemies(False):
 
             if enemy.x >= self.w - self.enemy_width:
@@ -231,6 +243,7 @@ class EnemyController:
                 move_down = True
                 break
 
+        # Randomly allows a random enemy to break formation, with a chance of one in 300
         if random.randint(0, 300) == 0:
             if len(self.get_alive_enemies()) > 0:
                 self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
@@ -240,6 +253,8 @@ class EnemyController:
                 enemy.y -= GameSettings.alien_speed_y
 
     def render_breaks(self, shooter_x, shooter_y):
+        # Update the positions of all the breakaway enemies
+
         if self.frozen:
             return
 

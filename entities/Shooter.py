@@ -1,4 +1,8 @@
-#libraries
+################################################
+# Student Name: Samkelo Nkabinde
+# Student Number: 28118944
+################################################
+
 import time
 import stddraw
 import math
@@ -19,7 +23,7 @@ class Shooter(GameObject):
         self.screen_height = height
 
         self._pixelHeight = self._width/len(self._shooter)
-        self._pixelWidth = self._heigth/len(self._shooter[0])
+        self._pixelWidth = self._height/len(self._shooter[0])
 
         self._x = self.screen_width//2
         self._y = 0.9 * self.screen_height

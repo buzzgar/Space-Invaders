@@ -2,6 +2,7 @@
 # Student Name: Ayesha Hofmeyer
 # Student Number: 26990571
 ################################################
+import os
 
 import stddraw
 import stdarray
@@ -9,7 +10,12 @@ from picture import Picture
 
 
 class Gif:
-    def __init__(self, directory, num_frames, x_centre, y_centre):
+    def __init__(self, directory, x_centre, y_centre):
+        files = os.listdir("/".join(directory.split("/")[0:-1]))
+
+        # determines num of frames by using key words from directory path to count relevqnt frames
+        num_frames = sum([1 if f.startswith(directory.split("/")[-1]) and f.endswith(".png") else 0 for f in files])
+
         self.frames = stdarray.create1D(num_frames, "")  # create array to store each frame
 
         for i in range(0, num_frames):  # populate array
@@ -57,6 +63,6 @@ class TitleScreen:
         stddraw.setFontSize(20)
         stddraw.text(self.x - 10, self.y - 75, "[A] move left, [S] stop move, [D] move right")
         stddraw.text(self.x - 5, self.y - 100, "[Q] rotate left, [W] stop rotate, [E] rotate right")
-        stddraw.text(self.x - 47, self.y - 125, "[Space] to shoot, [J] for shield, [I] for target line")
+        stddraw.text(self.x, self.y - 125, "[Space] to shoot, [J] for shield, [I] for target line")
         stddraw.text(self.x - 135, self.y - 150, "[X] to quit")
 

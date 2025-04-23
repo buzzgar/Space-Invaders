@@ -1,4 +1,7 @@
-import math
+################################################
+# Student Name: Meezaan Ryklief
+# Student Number: 26031825
+################################################
 
 import numpy as np
 import stddraw
@@ -13,6 +16,10 @@ h = GameSettings.HEIGHT
 b = 0
 
 game = Game(w, h)
+
+fps = GameSettings.FPS
+
+frame_time = 1 / fps
 
 if __name__ == '__main__':
 
@@ -34,7 +41,7 @@ if __name__ == '__main__':
 
         # Ensure the loop runs at the correct FPS
         elapsed_time = time.perf_counter() - start_time
-        sleep_time = game.frame_time - elapsed_time
+        sleep_time = frame_time - elapsed_time
         sleep_time = 1/(1 / sleep_time + avg_fps_diff)
 
         avg_fps = np.average(fps_lst[-21:-2])
@@ -54,6 +61,6 @@ if __name__ == '__main__':
 
         avg_fps = np.average(fps_lst[-20:])
 
-        avg_fps_diff = game.fps + 5 - avg_fps
+        avg_fps_diff = fps + 5 - avg_fps
 
         i += 1

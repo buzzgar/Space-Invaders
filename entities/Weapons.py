@@ -1,14 +1,15 @@
-import time
+################################################
+# Student Name: Ayesha Hofmeyer
+# Student Number: 26990571
+################################################
 
-import color
-import stddraw
-import stdio
-import stdarray
-from picture import Picture
 import math
-import numpy as np
 
-import utils.utils
+import numpy as np
+import stdarray
+import stddraw
+from picture import Picture
+
 from utils.utils import GameObject
 
 
@@ -45,8 +46,9 @@ class MissileController:
     def __init__(self, file, player_height, screen_width, screen_height):
         self.file = file
         self.h = player_height
-        self.missile = stdarray.create1D(
-            500)  #2D array with 500 rows (for num of missiles) and 3 column (for y and x coordinates AND ANGLE)
+
+        # array to store missiles
+        self.missile = stdarray.create1D(1000)
         self.num_missiles = 0
 
         self.screen_width = screen_width
@@ -62,10 +64,10 @@ class MissileController:
         self.x -= math.sin(np.radians(angle)) * self.h / 2
         self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
 
-        if self.num_missiles < 500:
-            self.missile[self.num_missiles] = Missile(self.file, self.x, self.y, self.angle)
-            self.missile[self.num_missiles].allow_draw = True
-            self.num_missiles += 1
+        #missile is added to array
+        self.missile[self.num_missiles % 1000] = Missile(self.file, self.x, self.y, self.angle) #replaces old moissiles with new missile positions
+        self.missile[self.num_missiles % 1000].allow_draw = True
+        self.num_missiles += 1
 
     def sequence(self):
         for i in range(self.num_missiles):
@@ -84,12 +86,10 @@ class MissileController:
 
 
 class Shield(GameObject):
-    def __init__(self, file, x, y, angle):
+    def __init__(self, file, x, y):
         self.file = file
         self.pic = Picture(self.file)
         super().__init__(None, x, y, self.pic.width(), self.pic.height(), None)
-
-        self.angle = np.radians(angle)
 
     def _draw(self):
         stddraw.picture(self.pic, self.x, self.y)
@@ -97,13 +97,8 @@ class Shield(GameObject):
 
 class ShieldController:
 
-    def __init__(self, file, player_height, screen_width, screen_height):
-        self.file = file
-
-        self.h = player_height
-
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+    def __init__(self):
+        self.file = "assets/shield_resized.png"
 
         self.shield_active = False
         self.shield = None
@@ -115,19 +110,12 @@ class ShieldController:
             self.shield_active = True
         return self.shield_active
 
-    def generate(self, x, y, angle):
-        # offset so aligns with shooter
-        self.x = x - math.sin(np.radians(angle)) * self.h / 2
-        self.y = y - (self.h / 2 - (math.cos(np.radians(angle)) * self.h / 2))
-
-        self.angle = angle
-
-        self.file = "assets/shield_resized.png" #from vecteezy.com
+    def generate(self, x, y):
 
         if not self.shield_active:
             return False
 
-        self.shield = Shield(self.file, self.x, self.y, angle)
+        self.shield = Shield(self.file, x, y)
 
     def draw(self):
         if not self.shield_active:
@@ -153,6 +141,7 @@ class AimController:
         self.y_start = y
         self.angle = angle
 
+        # calcuates x and y positiob given angle of player
         self.x_end = x + self.length * math.cos(self.angle)
         self.y_end = y + self.length * math.sin(self.angle)
 
