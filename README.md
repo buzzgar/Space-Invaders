@@ -1,25 +1,5 @@
 # Cosmic Conquestors
 
-## Title Screen
-- Lists game controls
-- Title screen displays a fun background animation
-- Press any key to move on to game screen
-
-## Game Screen
-### Entities
-#### Shooter
-- Shooter slides left and right until stop key pressed or at bounderies.
-- Shooter has 180 degrees of freedom and can rotate clockwise and anti-clockwise when respective keys are pressed. 
-- 
-
-#### Enemies
-
-#### Missile
-
-#### Head-up display
-
-## End Game Screen
-
 ## Advanced Additional Features
 - Added extra lives
 - Added enemies that drop bombs
