@@ -1,3 +1,8 @@
+################################################
+# Student Name: Ayesha Hofmeyer
+# Student Number: 26990571
+################################################
+
 import stddraw
 import stdarray
 from picture import Picture

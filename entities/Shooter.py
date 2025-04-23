@@ -1,4 +1,6 @@
-import time
+"""
+This class is a representation of the player
+"""
 
 import stddraw
 import math

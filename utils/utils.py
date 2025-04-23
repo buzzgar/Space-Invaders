@@ -95,13 +95,3 @@ def rotate_2d_array(array, angle_degrees):
                 rotated[y_new][x_new] = array[y_nearest][x_nearest]
 
     return rotated
-
-def rgb_to_int(rgb):
-    r, g, b = rgb
-    return (r << 16) + (g << 8) + b
-
-def int_to_rgb(value):
-    r = (value >> 16) & 0xFF
-    g = (value >> 8) & 0xFF
-    b = value & 0xFF
-    return (r, g, b)

@@ -10,8 +10,8 @@ game_over_sound = "assets/sounds/Game_Over"
 intro_sound = "assets/sounds/intro_music"
 victory_sound = "assets/sounds/win_sound"
 
-enemy_sprite_path = "assets/enemy/pngegg.png"
-player_sprite_path = "assets/shooter/space-game-low-res.png"
+enemy_sprite_path = "assets/enemy/enemy-sprite.png"
+player_sprite_path = "assets/shooter/shooter-sprite.png"
 missile_sprite_path = "assets/shooter/laser.gif"
 
 FPS = 60
@@ -21,7 +21,7 @@ player_speed = 20
 
 player_lost_health = "assets/sounds/roblox-death-sound-effect"
 
-health_up_sound = "assets/sounds/mixkit-video-game-health-recharge-2837.wav"
+health_up_sound = "assets/sounds/health-recharge.wav"
 
 WIDTH = 1024
 HEIGHT = 720

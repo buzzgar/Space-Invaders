@@ -1,8 +1,15 @@
 from picture import Picture as picture
 
+cache = {}
+cache_counter = {}
+def Picture(filename):
+    if filename in cache_counter:
+        cache_counter[filename] += 1
+    else:
+        cache_counter[filename] = 1
 
-class Picture(picture):
+    if cache_counter[filename] == 2:
+        cache[filename] = picture(filename)
+        return cache[filename]
 
-    def __init__(self, path):
-        self.path = path
-
+    return picture(filename)
