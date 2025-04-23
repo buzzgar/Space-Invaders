@@ -10,10 +10,11 @@ from entities.Enemy import EnemyController
 from entities.GroundEntity import Ground
 from entities.ModifierPowerUps import ModifierController, Modifier, FireRateModifier
 from entities.Shooter import Shooter
-from entities.missile_class import MissileController
+from entities.Weapons import MissileController, AimController, ShieldController
 from menu import Gif, TitleScreen
 from utils.SoundManager import SoundPlayer
 from utils.utils import collides
+from GameOver import GameOverScreen
 
 star_01 = picture.Picture("assets/game_backgrounds/back.png")
 star_02 = picture.Picture("assets/game_backgrounds/back.png")
@@ -22,6 +23,7 @@ class GameProperties:
 
     fire_rate = GameSettings.fire_rate
     player_lives = 5
+    enemies_destroyed = 0  # tally enemy death
 
     def __init__(self, sound_player: SoundPlayer, enemy_controller: EnemyController):
         self.sound_player = sound_player
@@ -64,6 +66,7 @@ class Game:
     MOVING_RIGHT = 1
 
     def __init__(self, w, h):
+        self.target_hit_count = None
         self.game_properties: GameProperties = None
         self.modifier_controller: ModifierController = None
         self.enemies_destroyed = None
@@ -73,14 +76,16 @@ class Game:
         self.moving_direction = None
 
         self.game_over_class = None
-        self.missile_controller = None
+        self.shield_controller : ShieldController() = None
+        self.missile_controller: MissileController = None
+        self.aim_controller = AimController()
         self.shooter = None
         self.ground_level = None
         self.enemy_controller: EnemyController = None
         self.running = True
 
         # counts when missile hits the enemy
-        self.target_hit_count = 0
+        self.targert_hit_count = 0
         self.player_lives = 5
 
         self.w = w
@@ -98,9 +103,11 @@ class Game:
         self.is_in_menu = True
         self.is_player_dead = False
 
-        self.intro_gif = Gif("assets/main_menu_background/menu", 5, self.w//2, self.h//2)
-        self.fail_gif = Gif("assets/end_game_screens/fail", 2, self.w//2, self.h//2)
-        self.win_gif = Gif("assets/end_game_screens/win", 4, self.w//2, self.h//2)
+        self.help = False
+
+        self.intro_gif = Gif("assets/main_menu_background/menu", 5, self.w//2, self.h//2) #drawn by group member Ayesha Hofmeyer (26990571)
+        self.fail_gif = Gif("assets/end_game_screens/fail", 3, self.w//2, self.h//2) #drawn by group member Ayesha Hofmeyer (26990571)
+        self.win_gif = Gif("assets/end_game_screens/win", 2, self.w//2, self.h//2) #drawn by group member Ayesha Hofmeyer (26990571)
 
         self.menu = TitleScreen(w, h)
 
@@ -117,6 +124,7 @@ class Game:
 
             return True
 
+
         self.intro_gif.draw_frame((i // 8) % 5)
         self.menu.instructions()
 
@@ -124,8 +132,10 @@ class Game:
 
     def game_over(self, i):
 
-        self.fail_gif.draw_frame((i // 60) % 2)
-        #self.game_over_class.game_over()
+        self.fail_gif.draw_frame((i // 30) % 3)
+        stddraw.setPenColor(stddraw.RED)
+        stddraw.setFontSize(50)
+        stddraw.text(self.w /2 + 400, self.h - 650, "Score: +" + str(self.target_hit_count))
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -135,9 +145,7 @@ class Game:
 
     def show_win_screen(self, i):
 
-        self.win_gif.draw_frame((i // 10) % 4)
-
-        #self.game_over_class.success()
+        self.win_gif.draw_frame((i // 30) % 2) #drawn by group member Ayesha Hofmeyer (26990571)
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -149,12 +157,16 @@ class Game:
         self.is_in_menu = True
         self.is_player_dead = False
         self.success = False
+        self.help = False
 
         self.enemy_controller = EnemyController(self.w, self.h, wave=4)
         self.ground_level = Ground(0, 0, self.w, 40)
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
         self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
         self.modifier_controller = ModifierController(self.w, self.h)
+        self.shield_controller = ShieldController(None, self.shooter.get_height(), self.w, self.h)
+        self.aim_controller = AimController()
+        self.game_over_class = GameOverScreen(self.w, self.h)
         self.game_properties = GameProperties(self.sound_player, self.enemy_controller)
 
         self.moving_direction = 0
@@ -170,6 +182,7 @@ class Game:
         self.sound_player.clear_buffer()
 
     def game_loop(self, i):
+        global enemies_destroyed
         self.game_properties.default_fire_rate()
         self.game_properties.apply_modifiers(i, self.modifier_controller.get_modifiers())
 
@@ -190,16 +203,45 @@ class Game:
                         self.rotating_direction = 0
                     case 's' | 'S':
                         self.moving_direction = 0
+                    case 'i' | 'I': #adds aim line
+                        self.aim_controller.visibility() #turns aim line ON/OFF
+                    case 'j' | 'J':
+                        self.shield_controller.visibility() #turns shield ON/OFF
+                        if self.shield_controller.shield_active:
+                            self.sound_player.play_audio_background("assets/sounds/shield_activate_sound") #from pixabay.com
+                    case 'h' | 'H': #H acts as ON/OFF switch
+                        self.render_help()
                     case 'x' | 'X':
                         quit()
 
+                x, y = self.shooter.get_x() + self.shooter.get_width() / 2, self.shooter.get_y() + self.shooter.get_height()
+
+                key = userInput
+                if key == ' ':  # check if new missile is being called, then creates it
+
+                    if time.time() - self.last_shot_fired > GameSettings.fire_rate:
+                        self.last_shot_fired = time.time()
+                        angle = int(round(self.shooter.get_angle() * 180 / math.pi, 5))
+
+                        self.missile_controller.generate(x, y, angle)
+
+                    if time.time() - self.last_shot_fired_sound > GameSettings.fire_rate:
+                        self.last_shot_fired_sound = time.time()
+                        self.sound_player.play_audio_background(GameSettings.gun_fire_sound)
+
+        x, y, angle = self.shooter.get_x() + self.shooter.get_width() / 2, self.shooter.get_y() + self.shooter.get_height() / 2, self.shooter.get_angle() + math.pi / 2
+        self.aim_controller.generate(x, y, angle)
+        self.shield_controller.generate(x, y, angle)
+
         if self.moving_direction == self.MOVING_LEFT:
             self.shooter.moveLeft()
+
         elif self.moving_direction == self.MOVING_RIGHT:
             self.shooter.moveRight()
 
         if self.rotating_direction == self.ROTATION_ANTICLOCKWISE:
             self.shooter.anticlockwise()
+
         elif self.rotating_direction == self.ROTATION_CLOCKWISE:
             self.shooter.clockwise()
 
@@ -229,9 +271,17 @@ class Game:
         self.enemy_controller.render_breaks(self.shooter.get_x(), self.shooter.get_y())
         self.enemy_controller.render()
 
+        self.shield_controller.draw()
+
         self.shooter.drawShooter()
 
+        self.aim_controller.draw()
+
+        if self.help:
+            self.menu.help()
+
         self.modifier_controller.frame_render(i)
+
 
         # display counter
         stddraw.setPenColor(stddraw.RED)
@@ -283,6 +333,18 @@ class Game:
                 else:
                     self.sound_player.play_audio_background(GameSettings.player_lost_health)
 
+            if self.shield_controller.shield_active: #if shield is currently visible / called
+
+                if collides(self.shield_controller.shield, drop): #if shield collides with dropped objects, both destroyed
+                    self.shield_controller.shield_active = False
+                    drop.kill_enemy()
+                    self.enemies_destroyed += 1
+                    self.target_hit_count += 1
+
+                    self.hit_points[i] = (drop.x, drop.y)
+
+                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound") #from pixabay.com
+
         for enemy in self.enemy_controller.get_alive_enemies():
             if not enemy.allow_draw:
                 continue
@@ -320,6 +382,18 @@ class Game:
 
                     self.sound_player.play_audio_background("assets/sounds/explosion-2")
 
+            if self.shield_controller.shield_active: #if shield is currently visible / called
+
+                if collides(self.shield_controller.shield, enemy): #if shield collides with enemy, both destroyed
+                    self.shield_controller.shield_active = False
+                    enemy.kill_enemy()
+                    self.enemies_destroyed += 1
+                    self.target_hit_count += 1
+
+                    self.hit_points[i] = (enemy.x, enemy.y)
+
+                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound") #from pixabay.com
+
     def render(self, i):
         global star_01, star_02, enemies_destroyed
 
@@ -327,12 +401,9 @@ class Game:
         h = self.h
 
         if self.is_in_menu:
-            #self.sound_player.play_audio_background(GameSettings.intro_sound)
             return self.main_menu(i)
         elif self.is_player_dead:
             self.game_over(i)
-        #elif self.success:
-            #self.success_screen()
         elif len(self.enemy_controller.get_alive_enemies()) == 0:
             if not self.WIN_EVENT:
                 self.WIN_EVENT = True
@@ -349,14 +420,9 @@ class Game:
             stddraw.picture(star_02, w//2, h//2, w, h)
             self.game_loop(i)
 
-    def success_screen(self):
-        self.game_over_class.success()
-
-        if stddraw.hasNextKeyTyped():
-            userInput = stddraw.nextKeyTyped()
-            match userInput:
-                case 'R' | 'r':
-                    self.reset()
-
     def render_help(self):
-        pass
+        if self.help:
+            self.help = False
+        else:
+            self.help = True
+
