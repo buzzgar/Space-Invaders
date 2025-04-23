@@ -4,10 +4,11 @@ import numpy as np
 import stddraw
 import time
 
+import GameSettings
 from GameController import Game
 
-w = 1024
-h = 720
+w = GameSettings.WIDTH
+h = GameSettings.HEIGHT
 
 b = 0
 

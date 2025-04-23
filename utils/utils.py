@@ -3,6 +3,8 @@ import math
 import color
 import stdaudio
 
+import GameSettings
+
 
 class GameObject:
 
@@ -35,7 +37,10 @@ class Music:
     def play_audio(self):
         stdaudio.playFile(self.filename)
 
-def collides(entity1: GameObject, entity2: GameObject) -> bool:
+def collides(entity1: GameObject, entity2: GameObject, off_screen_collision=False) -> bool:
+    if off_screen_collision:
+        if entity1.x + entity1.width < 0 or entity1.x > GameSettings.WIDTH or entity1.y + entity1.height < 0 or entity1.y > GameSettings.HEIGHT:
+            return False
 
     e1_x = entity1.x - entity1.width//2
     e1_y = entity1.y - entity1.height//2
