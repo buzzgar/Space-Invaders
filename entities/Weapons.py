@@ -122,7 +122,7 @@ class ShieldController:
 
         self.angle = angle
 
-        self.file = "assets/shield.png"
+        self.file = "assets/shield_resized.png" #from vecteezy.com
 
         if not self.shield_active:
             return False

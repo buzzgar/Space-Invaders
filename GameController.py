@@ -98,9 +98,9 @@ class Game:
 
         self.help = False
 
-        self.intro_gif = Gif("assets/main_menu_background/menu", 5, self.w//2, self.h//2)
-        self.fail_gif = Gif("assets/end_game_screens/fail", 3, self.w//2, self.h//2)
-        self.win_gif = Gif("assets/end_game_screens/win", 2, self.w//2, self.h//2)
+        self.intro_gif = Gif("assets/main_menu_background/menu", 5, self.w//2, self.h//2) #drawn by group member Ayesha Hofmeyer (26990571)
+        self.fail_gif = Gif("assets/end_game_screens/fail", 3, self.w//2, self.h//2) #drawn by group member Ayesha Hofmeyer (26990571)
+        self.win_gif = Gif("assets/end_game_screens/win", 2, self.w//2, self.h//2) #drawn by group member Ayesha Hofmeyer (26990571)
 
         self.menu = TitleScreen(w, h)
 
@@ -116,6 +116,7 @@ class Game:
             self.is_in_menu = False
 
             return True
+
 
         self.intro_gif.draw_frame((i // 8) % 5)
         self.menu.instructions()
@@ -137,7 +138,7 @@ class Game:
 
     def show_win_screen(self, i):
 
-        self.win_gif.draw_frame((i // 30) % 2)
+        self.win_gif.draw_frame((i // 30) % 2) #drawn by group member Ayesha Hofmeyer (26990571)
 
         if stddraw.hasNextKeyTyped():
             userInput = stddraw.nextKeyTyped()
@@ -158,6 +159,7 @@ class Game:
         self.modifier_controller = ModifierController(self.w, self.h)
         self.player_properties = PlayerProperties(self.sound_player)
         self.shield_controller = ShieldController(None, self.shooter.get_height(), self.w, self.h)
+        self.aim_controller = AimController()
         self.game_over_class = GameOverScreen(self.w, self.h)
 
         self.moving_direction = 0
@@ -198,6 +200,8 @@ class Game:
                         self.aim_controller.visibility() #turns aim line ON/OFF
                     case 'j' | 'J':
                         self.shield_controller.visibility() #turns shield ON/OFF
+                        if self.shield_controller.shield_active:
+                            self.sound_player.play_audio_background("assets/sounds/shield_activate_sound") #from pixabay.com
                     case 'h' | 'H': #H acts as ON/OFF switch
                         self.render_help()
                     case 'x' | 'X':
@@ -260,11 +264,11 @@ class Game:
         self.enemy_controller.render_breaks(self.shooter.get_x(), self.shooter.get_y())
         self.enemy_controller.render()
 
+        self.shield_controller.draw()
+
         self.shooter.drawShooter()
 
         self.aim_controller.draw()
-
-        self.shield_controller.draw()
 
         if self.help:
             self.menu.help()
@@ -331,7 +335,7 @@ class Game:
 
                     self.hit_points[i] = (drop.x, drop.y)
 
-                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound")
+                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound") #from pixabay.com
 
         for enemy in self.enemy_controller.get_alive_enemies():
             if not enemy.allow_draw:
@@ -380,7 +384,7 @@ class Game:
 
                     self.hit_points[i] = (enemy.x, enemy.y)
 
-                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound")
+                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound") #from pixabay.com
 
     def render(self, i):
         global star_01, star_02, enemies_destroyed

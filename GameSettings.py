@@ -12,7 +12,7 @@ victory_sound = "assets/sounds/win_sound"
 
 enemy_sprite_path = "assets/enemy/pngegg.png"
 player_sprite_path = "assets/shooter/space-game-low-res.png"
-missile_sprite_path = "assets/shooter/laser.gif"
+missile_sprite_path = "assets/shooter/laser.gif" #from https://www.artstation.com/lucia_robbins
 
 FPS = 60
 
