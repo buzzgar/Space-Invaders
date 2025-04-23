@@ -2,7 +2,10 @@
 
 ## Advanced Additional Features
 - Added extra lives
-- Added enemies that drop bombs
+- Added enemies
+        - Enemies randomly fall out of formation, directly move towards the player
+  	- Enemies that drop bombs may spawn
+  	- Different enemy formations
 - Added power ups:
 	- Ammo: Fire rate increases from 0.833 blasts/sec to 10  
 	- Health: Restore or add additional two lives
@@ -14,7 +17,6 @@
 	- Explosion animation when entities dies
 	- Game over and Win screens are animated images, drawn by student
 	- Missile is an animated gif where the frame were extracted
-- Enemies randomly fall out of formation, directly move towards the player
 
 ## Sources
 ### Image and Audio resources
