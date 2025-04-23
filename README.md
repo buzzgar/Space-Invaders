@@ -32,7 +32,9 @@
 - Added animations
 	- Title screen background
 	- Explosion animation when entities dies
-	- Game over screen backgrounds 
+	- Game over and Win screens are animated images, drawn by student
+	- Missile is an animated gif where the frame were extracted
+- Enemies randomly fall out of formation, directly move towards the player
 
 ## Sources
 ### Image and Audio resources
