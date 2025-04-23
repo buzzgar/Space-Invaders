@@ -36,7 +36,7 @@ class TitleScreen:
         stddraw.setFontSize(24)
         stddraw.text(self.x_centre, self.h - 250, "[A] move left, [S] stop move, [D] move right")
         stddraw.text(self.x_centre, self.h - 300, "[Q] rotate left, [W] stop rotate, [E] rotate right")
-        stddraw.text(self.x_centre, self.y_centre, "[Space] to shoot, [I] for target line")
+        stddraw.text(self.x_centre, self.y_centre, "[Space] to shoot, [J] for shield, [I] for target line")
         stddraw.text(self.x_centre, self.y_centre - 50, "[H] for help")
         stddraw.text(self.x_centre, self.y_centre - 100, "[X] to quit")
         stddraw.setFontSize(35)
@@ -51,6 +51,6 @@ class TitleScreen:
         stddraw.setFontSize(20)
         stddraw.text(self.x - 10, self.y - 75, "[A] move left, [S] stop move, [D] move right")
         stddraw.text(self.x - 5, self.y - 100, "[Q] rotate left, [W] stop rotate, [E] rotate right")
-        stddraw.text(self.x - 47, self.y - 125, "[Space] to shoot, [I] for target line")
+        stddraw.text(self.x - 47, self.y - 125, "[Space] to shoot, [J] for shield, [I] for target line")
         stddraw.text(self.x - 135, self.y - 150, "[X] to quit")
 

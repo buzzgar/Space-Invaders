@@ -24,30 +24,6 @@ class Canvas:
         stddraw.setXscale(0.0, self.w)
         stddraw.setYscale(0.0, self.w)
 
-class ShieldController:
-    def __init__(self, file, player_height, screen_width, screen_height):
-        self.file = file  # Store the image path ("assets/shield.webp")
-        self.player_height = player_height
-        self.screen_width = screen_width
-        self.screen_height = screen_height
-        self.active_shield = None  # Track the active shield
-
-    def generate(self, x, y, angle):
-        # Calculate adjusted position (so shield orbits the player)
-        adjusted_x = x - math.sin(np.radians(angle)) * self.player_height / 2
-        adjusted_y = y - (self.player_height / 2 - math.cos(np.radians(angle)) * self.player_height / 2)
-
-        # Create or update the shield
-        if self.active_shield is None:
-            self.active_shield = Shield(self.file, adjusted_x, adjusted_y, angle)
-        else:
-            # Update existing shield's position/angle
-            self.active_shield.x = adjusted_x
-            self.active_shield.y = adjusted_y
-            self.active_shield.angle = np.radians(angle)
-
-        return self.active_shield
-
 class Missile(GameObject):
     def __init__(self, file, x, y, angle):
 
@@ -76,8 +52,6 @@ class MissileController:
         self.screen_width = screen_width
         self.screen_height = screen_height
 
-        self.aimline_draw = False #checks if must generate aimline
-
     def generate(self, x, y, angle):
         self.x = x
         self.y = y
@@ -87,6 +61,7 @@ class MissileController:
 
         self.x -= math.sin(np.radians(angle)) * self.h / 2
         self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
+
         if self.num_missiles < 500:
             self.missile[self.num_missiles] = Missile(self.file, self.x, self.y, self.angle)
             self.missile[self.num_missiles].allow_draw = True
@@ -107,6 +82,58 @@ class MissileController:
             if self.missile[i].x < 0 or self.missile[i].x > self.screen_width or self.missile[i].y < 0 or self.missile[i].y > self.screen_height:
                 self.missile[i].allow_draw = False
 
+
+class Shield(GameObject):
+    def __init__(self, file, x, y, angle):
+        self.file = file
+        self.pic = Picture(self.file)
+        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None)
+
+        self.angle = np.radians(angle)
+
+    def _draw(self):
+        stddraw.picture(self.pic, self.x, self.y)
+
+
+class ShieldController:
+
+    def __init__(self, file, player_height, screen_width, screen_height):
+        self.file = file
+
+        self.h = player_height
+
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+
+        self.shield_active = False
+        self.shield = None
+
+    def visibility(self):  # ensures next time press key, opposite happens
+        if self.shield_active:
+            self.shield_active = False
+        else:
+            self.shield_active = True
+        return self.shield_active
+
+    def generate(self, x, y, angle):
+        # offset so aligns with shooter
+        self.x = x - math.sin(np.radians(angle)) * self.h / 2
+        self.y = y - (self.h / 2 - (math.cos(np.radians(angle)) * self.h / 2))
+
+        self.angle = angle
+
+        self.file = "assets/shield.png"
+
+        if not self.shield_active:
+            return False
+
+        self.shield = Shield(self.file, self.x, self.y, angle)
+
+    def draw(self):
+        if not self.shield_active:
+            return False
+        else:
+            self.shield._draw()
 
 class AimController:
     def __init__(self):

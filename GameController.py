@@ -69,7 +69,7 @@ class Game:
         self.moving_direction = None
 
         self.game_over_class = None
-        self.shield_controller: ShieldController = None
+        self.shield_controller : ShieldController() = None
         self.missile_controller: MissileController = None
         self.aim_controller = AimController()
         self.shooter = None
@@ -92,9 +92,6 @@ class Game:
 
         self.last_shot_fired_sound = time.time()
         self.last_shot_fired = time.time()
-
-        self.shield_start_time = 0
-        shield_active = False
 
         self.is_in_menu = True
         self.is_player_dead = False
@@ -160,7 +157,7 @@ class Game:
         self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
         self.modifier_controller = ModifierController(self.w, self.h)
         self.player_properties = PlayerProperties(self.sound_player)
-        self.shield_controller = ShieldController("assets/shield.jpg", self.shooter.get_height(), self.w, self.h)
+        self.shield_controller = ShieldController(None, self.shooter.get_height(), self.w, self.h)
         self.game_over_class = GameOverScreen(self.w, self.h)
 
         self.moving_direction = 0
@@ -198,7 +195,9 @@ class Game:
                     case 's' | 'S':
                         self.moving_direction = 0
                     case 'i' | 'I': #adds aim line
-                        self.aim_controller.visibility() #aimline switch
+                        self.aim_controller.visibility() #turns aim line ON/OFF
+                    case 'j' | 'J':
+                        self.shield_controller.visibility() #turns shield ON/OFF
                     case 'h' | 'H': #H acts as ON/OFF switch
                         self.render_help()
                     case 'x' | 'X':
@@ -219,20 +218,9 @@ class Game:
                         self.last_shot_fired_sound = time.time()
                         self.sound_player.play_audio_background(GameSettings.gun_fire_sound)
 
-                if key == 'u' or key == 'U':
-                    x = self.shooter.get_x() + self.shooter.get_width() / 2  # centres x and y
-                    y = self.shooter.get_y() + self.shooter.get_height() / 2
-                    angle = self.shooter.get_angle() + (math.pi / 2)  # ensures no rotation sets angle to 90 degrees
-
-                    shield._draw()
-                    shield_active = True
-                    self.shield_start_time = time.time()
-                    if time.time() - self.shield_start_time >= 10:
-                        shield = self.shield_controller.generate(x, y, angle)
-                        shield_active = False  # Hide shield # Calls stddraw.picture() internally
-
         x, y, angle = self.shooter.get_x() + self.shooter.get_width() / 2, self.shooter.get_y() + self.shooter.get_height() / 2, self.shooter.get_angle() + math.pi / 2
         self.aim_controller.generate(x, y, angle)
+        self.shield_controller.generate(x, y, angle)
 
         if self.moving_direction == self.MOVING_LEFT:
             self.shooter.moveLeft()
@@ -275,6 +263,8 @@ class Game:
         self.shooter.drawShooter()
 
         self.aim_controller.draw()
+
+        self.shield_controller.draw()
 
         if self.help:
             self.menu.help()
@@ -331,6 +321,18 @@ class Game:
                 else:
                     self.sound_player.play_audio_background(GameSettings.player_lost_health)
 
+            if self.shield_controller.shield_active: #if shield is currently visible / called
+
+                if collides(self.shield_controller.shield, drop): #if shield collides with dropped objects, both destroyed
+                    self.shield_controller.shield_active = False
+                    drop.kill_enemy()
+                    self.enemies_destroyed += 1
+                    self.target_hit_count += 1
+
+                    self.hit_points[i] = (drop.x, drop.y)
+
+                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound")
+
         for enemy in self.enemy_controller.get_alive_enemies():
             if not enemy.allow_draw:
                 continue
@@ -367,6 +369,18 @@ class Game:
                     self.hit_points[i] = (enemy.x, enemy.y)
 
                     self.sound_player.play_audio_background("assets/sounds/explosion-2")
+
+            if self.shield_controller.shield_active: #if shield is currently visible / called
+
+                if collides(self.shield_controller.shield, enemy): #if shield collides with enemy, both destroyed
+                    self.shield_controller.shield_active = False
+                    enemy.kill_enemy()
+                    self.enemies_destroyed += 1
+                    self.target_hit_count += 1
+
+                    self.hit_points[i] = (enemy.x, enemy.y)
+
+                    self.sound_player.play_audio_background("assets/sounds/shield_guard_sound")
 
     def render(self, i):
         global star_01, star_02, enemies_destroyed
