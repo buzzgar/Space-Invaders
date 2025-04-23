@@ -8,4 +8,10 @@ https://mixkit.co/free-sound-effects/space-shooter/ (game over screen sound effe
 | --------------------------------- | ------------------------------------------------------ | ------------ |
 | `assets/enemy/enemy-sprite.png`   | https://www.pngegg.com/en/png-yqvtx                    | Enemy Image  |
 | assets/shooter/shooter-sprite.png | https://www.flaticon.com/free-icon/space-game_18448645 | Player Image |
-|                                   |                                                        |              |
+| assets/sounds/shield_activate_sound | https://pixabay.com/sound-effects/sword-slash-with-metal-shield-impact-185433/ | Shield Sound | 
+| assets/sounds/shield_guard_sound | https://pixabay.com/sound-effects/shield-guard-6963/ | Shield Sound |
+| assets/shield_resized.png | https://www.vecteezy.com/png/56768885-delicate-soap-bubble-with-inner-spheres-and-glossy-surface |  Shield Image |
+| assets/laser.gif | https://www.artstation.com/artwork/aorZ0L | Missile Animation | 
+| assets/sounds/blast-101soundboard.wav | https://pixabay.com/sound-effects/laser-gun-81720/ | Missile Sound | 
+| assets/sounds/win_sound.wav | https://pixabay.com/sound-effects/goodresult-82807/ | Victory Sound | 
+| assets/sounds/Game_Over.wav | https://mixkit.co/free-sound-effects/space-shooter/ | Game Over Sound | 
