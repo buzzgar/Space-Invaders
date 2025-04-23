@@ -25,6 +25,7 @@ class ClassicEnemy(GameObject):
         self.enemy_type = self.CLASSIC_ENEMY
 
     def _draw(self):
+
         if self.death_preview_frame > 1 and not self.is_alive:
             self.death_preview_frame -= 1
         elif not self.is_alive:

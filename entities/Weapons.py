@@ -1,3 +1,5 @@
+import time
+
 import color
 import stddraw
 import stdio
@@ -21,19 +23,6 @@ class Canvas:
         stddraw.clear(stddraw.GRAY)
         stddraw.setXscale(0.0, self.w)
         stddraw.setYscale(0.0, self.w)
-
-
-class Shield(GameObject):
-    def __init__(self, file, x, y, angle):
-        self.file = file
-
-        self.pic = Picture(self.file)
-        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None)
-
-        self.angle = np.radians(angle)
-
-    def _draw(self):
-        stddraw.picture(self.pic, self.x, self.y)
 
 class ShieldController:
     def __init__(self, file, player_height, screen_width, screen_height):
@@ -87,6 +76,8 @@ class MissileController:
         self.screen_width = screen_width
         self.screen_height = screen_height
 
+        self.aimline_draw = False #checks if must generate aimline
+
     def generate(self, x, y, angle):
         self.x = x
         self.y = y
@@ -116,15 +107,31 @@ class MissileController:
             if self.missile[i].x < 0 or self.missile[i].x > self.screen_width or self.missile[i].y < 0 or self.missile[i].y > self.screen_height:
                 self.missile[i].allow_draw = False
 
-    def aimline(self, x, y, angle):
+
+class AimController:
+    def __init__(self):
+        self.aim_active = False
+
+        self.length = 500
+
+    def visibility(self): #ensures next time press key, opposite happens
+        if self.aim_active:
+            self.aim_active = False
+        else :
+            self.aim_active = True
+        return self.aim_active
+
+    def generate(self, x, y, angle):
         self.x_start = x
         self.y_start = y
         self.angle = angle
-        self.base_length = 10
 
-        length = 500 + self.base_length * math.sin(self.angle)  #length of aimline
+        self.x_end = x + self.length * math.cos(self.angle)
+        self.y_end = y + self.length * math.sin(self.angle)
 
-        self.x_last = self.x_start + length * math.cos(self.angle) #x1
-        self.y_last = self.y_start + length * math.sin(self.angle) #y1
-
-        stddraw.line(self.x_start, self.y_start, self.x_last, self.y_last)
+    def draw(self):
+        if not self.aim_active:
+            return False
+        else:
+            stddraw.setPenColor(stddraw.RED)
+            stddraw.line(self.x_start, self.y_start, self.x_end, self.y_end)
