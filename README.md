@@ -21,15 +21,18 @@
 ## End Game Screen
 
 ## Advanced Additional Features
-- Added lives
-- Added enemies that can drop bombs
-- Added power ups, like fire rate, health and freeze enemies.
-- Added shield to protect player
-- Added custom images and sounds, to  all entities.
+- Added extra lives
+- Added enemies that drop bombs
+- Added power ups:
+	- Ammo: Fire rate increases from 0.833 blasts/sec to 10  
+	- Health: Restore or add additional two lives
+	- Freeze Bomb: Freeze all enemies  
+- Added shield to protect player from bombs and enemy collisions 
+- Added custom images and sounds to all entities 
 - Added animations
 	- Title screen background
 	- Explosion animation when entities dies
-	- 
+	- Game over screen backgrounds 
 
 ## Sources
 ### Image and Audio resources
