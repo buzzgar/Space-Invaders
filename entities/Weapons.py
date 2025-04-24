@@ -32,8 +32,8 @@ class Missile(GameObject):
         self.file = file # stores image path
         
         #stores the image in self.pic which will  be used to initialise the heigth and width of the image 
-        self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=self.frame)) #replace {frame:03d} with self.frame as a 3 digit number 
-        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None) # retrieve width and height 
+        self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=self.frame)) # replace {frame:03d} with self.frame as a 3 digit number 
+        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None) # initialise width and height of image
 
         self.angle = np.radians(angle)
 
@@ -41,7 +41,7 @@ class Missile(GameObject):
         # stores the specific frame for specific angle the missile is fired at. this will be used to generte the missile animation 
         # cycles through 5 frames at a speed of 1 frame every 10 sec 
         self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10)) 
-        stddraw.picture(self.pic, self.x, self.y) #displays the frame 
+        stddraw.picture(self.pic, self.x, self.y) # displays the frame 
 
         self.frame += 1 # increments self.frame so that animation changes to next frame next time _draw function is called
 class MissileController:
@@ -56,6 +56,8 @@ class MissileController:
         self.screen_height = screen_height
 
     def generate(self, x, y, angle):        
+        self.x = x
+        self.y = y
         self.angle = angle
 
         # centres the starting x and y positions of the missile to the centre of shooter 
@@ -91,23 +93,23 @@ class MissileController:
 
 class Shield(GameObject):
     def __init__(self, file, x, y):
-        self.file = file
-        self.pic = Picture(self.file)
-        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None)
+        self.file = file # stores image path
+        self.pic = Picture(self.file) # stores the image in self.pic which will be used to initialise the heigth and width of the image 
+        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None) # initialise width and height of image
 
     def _draw(self):
-        stddraw.picture(self.pic, self.x, self.y)
+        stddraw.picture(self.pic, self.x, self.y) # displays image 
 
 
 class ShieldController:
 
     def __init__(self):
-        self.file = "assets/shield_resized.png"
+        self.file = "assets/shield_resized.png" # iamge path
 
-        self.shield_active = False
-        self.shield = None
+        self.shield_active = False # flag that tracks when shield is visible/drawn
+        self.shield = None # stores shield image 
 
-    def visibility(self):  # ensures next time press key, opposite happens
+    def visibility(self):  # ensures next time press key, self.sheild_active flag inverts. so if shield active, pressing key again with set the flag to false 
         if self.shield_active:
             self.shield_active = False
         else:
@@ -115,25 +117,24 @@ class ShieldController:
         return self.shield_active
 
     def generate(self, x, y):
-
-        if not self.shield_active:
+        if not self.shield_active: # if sheild active flag is false, shield image not stored in self.shield  
             return False
 
-        self.shield = Shield(self.file, x, y)
+        self.shield = Shield(self.file, x, y) # stores image in self.shield at the changing x,y positions of the shooter
 
     def draw(self):
-        if not self.shield_active:
+        if not self.shield_active: # if sheild active flag is false, shield image not stored in self.shield  
             return False
         else:
-            self.shield._draw()
+            self.shield._draw() # dispalys sheild image 
 
 class AimController:
     def __init__(self):
-        self.aim_active = False
+        self.aim_active = False # flag that tracks when aim is visible/drawn
 
-        self.length = 500
+        self.length = 500 # length of line 
 
-    def visibility(self): #ensures next time press key, opposite happens
+    def visibility(self): # ensures next time press key, self.aim_active flag inverts. so if shield active, pressing key again with set the flag to false 
         if self.aim_active:
             self.aim_active = False
         else :
@@ -150,8 +151,8 @@ class AimController:
         self.y_end = y + self.length * math.sin(self.angle)
 
     def draw(self):
-        if not self.aim_active:
+        if not self.aim_active: # if sheild aim flag is false, line not drawn 
             return False
         else:
             stddraw.setPenColor(stddraw.RED)
-            stddraw.line(self.x_start, self.y_start, self.x_end, self.y_end)
+            stddraw.line(self.x_start, self.y_start, self.x_end, self.y_end) # draws angled line at shooter's current x and y posiiton 
