@@ -41,3 +41,6 @@
 | assets/sounds/Game_Over.wav | https://mixkit.co/free-sound-effects/space-shooter/ | Game Over Sound | 
 
 ### ChatGPT Prompts
+| Student Name                          | Chat Link                                                   
+| ------------------------------------ | ------------------------------------------------------ 
+| Samkelo Nkabinde                     | https://chatgpt.com/share/680b435d-3a18-8004-bdaf-5d9574922af5                  
