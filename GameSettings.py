@@ -1,3 +1,5 @@
+# Stores all settings for the game and possible sprite paths, so that customization is easier.
+
 alien_speed_x = 20
 alien_speed_y = 10
 
