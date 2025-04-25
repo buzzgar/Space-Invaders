@@ -6,7 +6,7 @@
 import math
 import random
 
-import picture
+from utils.PictureLoader import Picture
 import stddraw
 
 import GameSettings
@@ -20,17 +20,17 @@ class ClassicEnemy(GameObject):
     BOMB_ENEMY = 2
 
     def __init__(self, name, x, y, width, height, p):
-        super().__init__(name, x, y, width, height, None)
+        super().__init__(name, x, y, width, height)
         self.allow_draw = True
         self.is_alive = True
         self.p = p
 
-        self.death_preview_frame = 12
+        self.death_preview_frame = GameSettings.DEATH_FRAME_TIME
 
         self.enemy_type = self.CLASSIC_ENEMY
 
         self.frozen = False
-        self.frozen_pic = picture.Picture("assets/enemy/frozen-enemy.png")
+        self.frozen_pic = Picture("assets/enemy/frozen-enemy.png")
 
     def _draw(self):
 
@@ -42,7 +42,7 @@ class ClassicEnemy(GameObject):
         p = self.p
 
         if not self.is_alive:
-            p = picture.Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.death_preview_frame))
+            p = Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.death_preview_frame))
         elif self.frozen:
             p = self.frozen_pic
 
@@ -56,16 +56,10 @@ class ClassicEnemy(GameObject):
         self.frozen = frozen
         super().draw()
 
-class FreezeEnemy(ClassicEnemy):
-
-    def __init__(self, name, x, y, width, height, p):
-        super().__init__(name, x, y, width, height, p)
-        self.enemy_type = self.FREEZE_ENEMY
-
 class BombEnemy(ClassicEnemy):
 
     def __init__(self, name, x, y, width, height, p):
-        p = picture.Picture("assets/enemy/pngegg-bomb-dropper.png")
+        p = Picture("assets/enemy/pngegg-bomb-dropper.png")
 
         super().__init__(name, x, y, width, height, p)
         self.enemy_type = self.BOMB_ENEMY
@@ -73,24 +67,24 @@ class BombEnemy(ClassicEnemy):
     def draw(self, frozen=False):
         super().draw(frozen)
 
-        if random.randint(0, 200) == 0 and self.is_alive:
+        if random.randint(0, GameSettings.CHANCE_OF_ENEMY_DROPPING_BOMB) == 0 and self.is_alive:
             return True
 
 class EnemyDrops(GameObject):
 
     def __init__(self, name, x, y):
 
-        self.p = picture.Picture("assets/enemy/bomb.png")
+        self.p = Picture("assets/enemy/bomb.png")
 
         width = self.p.width()
         height = self.p.height()
 
-        super().__init__(name, x, y, width, height, None)
+        super().__init__(name, x, y, width, height)
 
         self.allow_draw = True
         self.is_alive = True
 
-        self.bomb_preview_frame = 12
+        self.bomb_preview_frame = GameSettings.DEATH_FRAME_TIME
 
     def _draw(self):
 
@@ -100,7 +94,7 @@ class EnemyDrops(GameObject):
             self.allow_draw = False
 
         if not self.is_alive:
-            self.p = picture.Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.bomb_preview_frame))
+            self.p = Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.bomb_preview_frame))
 
         stddraw.picture(self.p, self.x, self.y, self.width, self.height)
 
@@ -130,7 +124,7 @@ class EnemyController:
 
         self.frozen = False
 
-        p = picture.Picture(GameSettings.enemy_sprite_path)
+        p = Picture(GameSettings.enemy_sprite_path)
 
         a_ratio = p.width() / p.height()
         self.enemy_width = self.enemy_height * a_ratio
@@ -244,7 +238,7 @@ class EnemyController:
                 break
 
         # Randomly allows a random enemy to break formation, with a chance of one in 300
-        if random.randint(0, 300) == 0:
+        if random.randint(0, GameSettings.CHANCE_OF_BREAK_AWAY) == 0:
             if len(self.get_alive_enemies()) > 0:
                 self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
 

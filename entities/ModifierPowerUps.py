@@ -6,30 +6,36 @@
 from random import randint
 
 import stddraw
-from picture import Picture
+from utils.PictureLoader import Picture
 
 import GameSettings
 from utils.utils import GameObject
 
 class Modifier(GameObject):
 
+    # FLAGS that indicate the type of modifier
     HEALTH_MODIFIER = 0
     FIRE_RATE_MODIFIER = 1
     FROZEN_MODIFIER = 2
 
+    DISABLE_TIME = -1
+
     def __init__(self, x, y, filename):
+
         self.pic = Picture(filename)
         width = self.pic.width()
         height = self.pic.height()
 
-        super().__init__("Modifier PowerUps", x, y, width, height, None)
+        super().__init__("Modifier PowerUps", x, y, width, height)
         self.allow_draw = True
 
         self.is_picked_up = False
         self.frame_used = -1
 
-        self.allowed_time_use = 5
+        # Indicates how long the modifier is active in seconds
+        self.allowed_time_use = self.DISABLE_TIME
 
+        # Number of times the modifier can be used
         self.uses = 1
 
         self.modifier_type = None
@@ -43,17 +49,21 @@ class Modifier(GameObject):
         self.frame_used = i
 
     def is_active(self, i):
-        if self.allowed_time_use == -1:
+        # cHecks if the modifier is still active
+
+        # If the allowed time is -1, determines if the modifier can be used based off the number of uses left
+        if self.allowed_time_use == self.DISABLE_TIME:
             if self.uses > 0:
                 self.uses -= 1
                 return True
             return False
 
+        # If the allowed time is not -1, determines if the modifier is still active
         if i - self.frame_used > self.allowed_time_use * GameSettings.FPS:
             return False
         return True
 
-
+# Define modifier classes and set up there revalent attributes
 class HealthUpModifier(Modifier):
     def __init__(self, x, y, filename):
         super().__init__(x, y, filename)
@@ -92,16 +102,17 @@ class ModifierController:
     def frame_render(self, i):
         # Renders all modifiers/powerups on the screen
         # Also enables new modifiers to spawn randomly
+        # Moves the modifiers down the screen
 
-        if randint(0, 500) == 0:
+        if randint(0, GameSettings.CHANCE_OF_FIRE_RATE_MODIFIER) == 0:
             self.modifiers.append(FireRateModifier(
                 randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/bullets-36.png"))
 
-        if randint(0, 800) == 0:
+        if randint(0, GameSettings.CHANCE_OF_HEALTH) == 0:
             self.modifiers.append(HealthUpModifier(
                 randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/heart-plus-36.png"))
 
-        if randint(0, 1500) == 0:
+        if randint(0, GameSettings.CHANCE_OF_FREEZE_BOMB) == 0:
             self.modifiers.append(FreezeModifier(
                 randint(0, self.screen_width), randint(int(self.screen_height * 0.8), self.screen_height), "assets/modifiers/ice-bolt-48.png"))
 

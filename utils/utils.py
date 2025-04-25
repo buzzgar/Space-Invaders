@@ -12,7 +12,7 @@ import GameSettings
 
 class GameObject:
 
-    def __init__(self, name, x, y, width, height, color):
+    def __init__(self, name, x, y, width, height):
         self.x = x
         self.y = y
         self.name = name
@@ -20,15 +20,17 @@ class GameObject:
         self.width = width
         self.height = height
 
-        self.color = color
-
         self.is_alive = False
         self.is_destroyed = False
 
         self.allow_draw = False
 
     def draw(self):
-        if self.allow_draw:
+
+        screen_width = GameSettings.WIDTH
+        screen_height = GameSettings.HEIGHT
+
+        if self.allow_draw and screen_width > self.x > 0 and screen_height > self.y > 0:
             self._draw()
 
     def _draw(self):
@@ -42,9 +44,18 @@ class Music:
         stdaudio.playFile(self.filename)
 
 def collides(entity1: GameObject, entity2: GameObject, off_screen_collision=False) -> bool:
-    if off_screen_collision:
+    # Class to check if any GameObjects/Entities are colliding
+
+    # If any game object is off the screen, we exclude it from the collision or if the game object is not allowed to be drawn
+    if not off_screen_collision:
         if entity1.x + entity1.width < 0 or entity1.x > GameSettings.WIDTH or entity1.y + entity1.height < 0 or entity1.y > GameSettings.HEIGHT:
             return False
+
+    if not entity1.allow_draw or not entity2.allow_draw:
+        return False
+
+    # All GameObjects have an xy coordinate system from the center
+    # To check for collision, we need to change the coordinates to the top left corner
 
     e1_x = entity1.x - entity1.width//2
     e1_y = entity1.y - entity1.height//2
@@ -52,6 +63,7 @@ def collides(entity1: GameObject, entity2: GameObject, off_screen_collision=Fals
     e2_x = entity2.x - entity2.width//2
     e2_y = entity2.y - entity2.height//2
 
+    # Return true if the two GameObjects are colliding
     return (
             e1_x + entity1.width > e2_x and
             e1_x < e2_x + entity2.width and

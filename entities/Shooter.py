@@ -6,7 +6,7 @@
 import time
 import stddraw
 import math
-from picture import Picture
+from utils.PictureLoader import Picture
 import GameSettings
 from utils.utils import GameObject
 
@@ -17,7 +17,7 @@ class Shooter(GameObject):
         self._width = 2*scaleFactor
         self._height = 2*scaleFactor
 
-        super().__init__(name, x, y, self._width, self._height, color)
+        super().__init__(name, x, y, self._width, self._height)
 
         self.screen_width = width
         self.screen_height = height
@@ -28,20 +28,21 @@ class Shooter(GameObject):
         self._x = self.screen_width//2
         self._y = 0.9 * self.screen_height
 
-        self.x = self._x
-        self.y = self._y
+        self.x = self._x + self.get_width() / 2
+        self.y = self._y + self.get_height() / 2
 
         self._speed = GameSettings.player_speed
         self._delta_angle = GameSettings.player_angle_change
 
         self._angle = 0
+        self.allow_draw = True
         
     # Getters for private instances
     def get_x(self):
-        return self._x
+        return self.x
 
     def get_y(self):
-        return self._y
+        return self.y
 
     def get_width(self):
         return self._width
@@ -58,16 +59,18 @@ class Shooter(GameObject):
             self._x = 0
         else:
             self._x -= self._speed
-        self.x = self._x
-        self.y = self._y
+
+        self.x = self._x + self.get_width() / 2
+        self.y = self._y + self.get_height() / 2
 
     def moveRight(self):   
         if self._x + (self._width) < self.screen_width:
             self._x += self._speed
         if self._x + (self._width) >= self.screen_width:
             self._x -= self._speed
-        self.x = self._x
-        self.y = self._y
+
+        self.x = self._x + self.get_width() / 2
+        self.y = self._y + self.get_height() / 2
         
     # Rotation Methods
     def anticlockwise(self):
@@ -135,9 +138,6 @@ class Shooter(GameObject):
     def drawShooter(self):
         # Draws the shooter on the screen
         self._renderShooter()
-
-    def died(self):
-        pass
 
 
     
