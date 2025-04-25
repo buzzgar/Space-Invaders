@@ -33,7 +33,7 @@ class Missile(GameObject):
 
         # stores the image in self.pic which will  be used to initialise the height and width of the image
         self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=self.frame)) # replace {frame:03d} with self.frame as a 3 digit number
-        super().__init__(None, x, y, self.pic.width(), self.pic.height(), None) # initialise width and height of image
+        super().__init__(None, x, y, self.pic.width(), self.pic.height()) # initialise width and height of image
 
         self.angle = np.radians(angle)
 
@@ -84,9 +84,7 @@ class MissileController:
         self.num_missiles += 1 # increments self.num_missiles each time new missile fired
 
     def sequence(self):
-        for i in range(self.num_missiles):
-            # stores starting positions of new missile
-            self.y = self.missile[i].y
+
         for i in range(min(self.num_missiles, self.missile_count)):
             # Checks if missile is out of bounds, no point in drawing or updating values
             if self.missile[i].x < 0 or self.missile[i].x > self.screen_width or self.missile[i].y < 0 or self.missile[i].y > self.screen_height:

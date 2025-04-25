@@ -87,7 +87,7 @@ class Game:
         self.enemy_controller: EnemyController = None
 
         # counts when missile hits the enemy
-        self.targert_hit_count = 0
+        self.target_hit_count = 0
 
         self.w = w
         self.h = h

@@ -143,7 +143,7 @@ class ModifierController:
     def random_spawn_location(self):
         # Generates a random spawn location for a modifier
 
-        return randint(self.screen_width * 0.8, self.screen_width * 0.8), randint(
+        return randint(int(self.screen_width * 0.2), int(self.screen_width * 0.8)), randint(
             int(self.screen_height * 0.8), self.screen_height)
 
     def get_modifiers(self) -> list:
