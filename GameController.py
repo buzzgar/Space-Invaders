@@ -34,14 +34,17 @@ class GameProperties:
         self.enemy_controller = enemy_controller
 
     def default_fire_rate(self):
+        # Resets fire rate
         self.fire_rate = GameSettings.fire_rate
 
     def player_lost_health(self):
+        # Decreases player health
         self.player_lives -= 1
 
     def apply_modifiers(self, i, modifiers: List[Modifier]):
+        # Applies modifiers that have been picked up and are active
 
-        self.enemy_controller.frozen = False
+        self.enemy_controller.frozen = False # unfreeze enemies
 
         for modifier in modifiers:
             if not modifier.is_picked_up:
@@ -50,12 +53,12 @@ class GameProperties:
             if modifier.is_active(i):
                 if modifier.modifier_type == modifier.FIRE_RATE_MODIFIER:
                     modifier: FireRateModifier
-                    self.fire_rate = modifier.fire_rate
+                    self.fire_rate = modifier.fire_rate # update fire rate
                 elif modifier.modifier_type == modifier.HEALTH_MODIFIER:
-                    self.player_lives += 1
+                    self.player_lives += 1 # update health
                     self.sound_player.play_audio_background(GameSettings.health_up_sound)
                 elif modifier.modifier_type == modifier.FROZEN_MODIFIER:
-                    self.enemy_controller.frozen = True
+                    self.enemy_controller.frozen = True # freeze enemies
 
 
 class Game:
@@ -270,7 +273,7 @@ class Game:
         if self.help: #flags true when h is pressed, then renders help display
             self.menu.help()
 
-        self.modifier_controller.frame_render(i)
+        self.modifier_controller.frame_render(i) # Renders modifiers and updates their positions
 
         # display counter
         stddraw.setPenColor(stddraw.RED)
@@ -313,7 +316,7 @@ class Game:
                     continue
 
                 if collides(missile, drop):
-                    drop.kill_enemy()
+                    drop.kill_enemy() # Kill bomb and display death animation
                     missile.allow_draw = False
 
             if collides(drop, self.ground_level):
