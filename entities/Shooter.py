@@ -55,6 +55,7 @@ class Shooter(GameObject):
 
     # Motion methods
     def moveLeft(self):
+        # Moves shooter left and ensures it does not move beyond boundary 
         if self._x - (self._width / 2) <= 0:
             self._x = 0
         else:
@@ -63,7 +64,8 @@ class Shooter(GameObject):
         self.x = self._x + self.get_width() / 2
         self.y = self._y + self.get_height() / 2
 
-    def moveRight(self):   
+    def moveRight(self):
+         # Moves shooter right and ensures it does not move beyond boundary 
         if self._x + (self._width) < self.screen_width:
             self._x += self._speed
         if self._x + (self._width) >= self.screen_width:
@@ -74,6 +76,7 @@ class Shooter(GameObject):
         
     # Rotation Methods
     def anticlockwise(self):
+        # Rotate shoter anti-clockwise and ensures it stays within the horizon
         angle = self._delta_angle
         new_angle = self._angle + math.radians(angle)
         if new_angle > math.radians(90):
@@ -82,6 +85,7 @@ class Shooter(GameObject):
             self._angle = new_angle
 
     def clockwise(self):
+        # Rotate shoter clockwise and ensures it stays within the horizon
         angle = -self._delta_angle
         new_angle = self._angle + math.radians(angle)
         if new_angle < math.radians(-90):
