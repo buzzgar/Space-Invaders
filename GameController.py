@@ -62,9 +62,6 @@ class GameProperties:
 
 
 class Game:
-    MENU_SCREEN_FLAG = 100
-    GAME_SCREEN_FLAG = 200
-    GAME_OVER_SCREEN_FLAG = 300
 
     ROTATION_ANTICLOCKWISE = -1
     ROTATION_CLOCKWISE = 1
@@ -94,8 +91,6 @@ class Game:
 
         self.w = w
         self.h = h
-
-        self.current_screen = self.MENU_SCREEN_FLAG
 
         self.last_shot_fired = time.time()
 
