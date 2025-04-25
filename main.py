@@ -21,11 +21,16 @@ fps = GameSettings.FPS
 
 frame_time = 1 / fps
 
-if __name__ == '__main__':
+def main():
 
+    # Set scale one-to-one with canvas
     stddraw.setCanvasSize(w, h)
     stddraw.setXscale(0, w)
     stddraw.setYscale(0, h)
+
+    # The following is for the FPS counter
+    # it tries to keep the fps as consistent as possible
+    # by sleeping for a certain amount of time
 
     fps_lst = []
 
@@ -64,3 +69,6 @@ if __name__ == '__main__':
         avg_fps_diff = fps + 5 - avg_fps
 
         i += 1
+
+if __name__ == '__main__':
+    main()

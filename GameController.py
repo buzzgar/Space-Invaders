@@ -413,6 +413,7 @@ class Game:
                 self.WIN_EVENT = True
                 self.sound_player.clear_buffer()
 
+            # Clear sound buffer and play victory sound
             if self.sound_player.is_empty():
                 self.sound_player.clear_buffer()
                 self.sound_player.play_audio_background(GameSettings.victory_sound)
