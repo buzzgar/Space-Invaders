@@ -28,8 +28,8 @@
 | `assets/sounds/health-recharge.wav`  | https://mixkit.co/free-sound-effects/discover/health/  | Player Sound    |
 | `assets/enemy/explosion`             | https://th.picmix.com/stamp/Game-Fire-2483872          | Explosion gif   |
 | `assets/enemy/bomb.png`              | https://cdn-icons-png.flaticon.com/512/595/595582.png  | Bomb Image      |
-| `assets/modifiers/ice-bolt-48.png`   | https://game-icons.net/1x1/zeromancer/heart-plus.html  | Modifier Icon   |
-| `assets/modifiers/heart-plus-36.png` | https://game-icons.net/1x1/lorc/bullets.html           | Modifier Icon   |
+| `assets/modifiers/heart-plus-36.png`   | https://game-icons.net/1x1/zeromancer/heart-plus.html  | Modifier Icon   |
+| `assets/modifiers/bullets-36.png` | https://game-icons.net/1x1/lorc/bullets.html           | Modifier Icon   |
 | `assets/modifiers/ice-bolt-48.png`   | https://game-icons.net/1x1/lorc/ice-bolt.html          | Modifier Icon   |
 | `assets/sounds/explosion-2.wav`      | https://uppbeat.io/sfx/explosion-in-tight-space/53/723 | Explosion sound |
 | assets/sounds/shield_activate_sound | https://pixabay.com/sound-effects/sword-slash-with-metal-shield-impact-185433/ | Shield Sound | 
