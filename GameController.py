@@ -220,6 +220,7 @@ class Game:
         self.aim_controller.generate(centered_x, centered_y, angle)
         self.shield_controller.update_pos(centered_x, centered_y)
 
+        # Move and rotate shooter based off state
         if self.moving_direction == self.MOVING_LEFT:
             self.shooter.moveLeft()
 
@@ -247,8 +248,9 @@ class Game:
                     self.missile_controller.generate(centered_x, centered_y, angle)
                     self.sound_player.play_audio_background(GameSettings.gun_fire_sound)
 
+        # Update enemy positions
         self.enemy_controller.step()
-        self.enemy_controller.render_breaks(self.shooter.get_x(), self.shooter.get_y())
+        self.enemy_controller.step_breakaway(self.shooter.get_x(), self.shooter.get_y())
 
         # Render all entities
 

@@ -31,15 +31,16 @@ class Missile(GameObject):
         self.frame = 0
         self.file = file # stores image path
 
-        #stores the image in self.pic which will  be used to initialise the heigth and width of the image
+        # stores the image in self.pic which will  be used to initialise the height and width of the image
         self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=self.frame)) # replace {frame:03d} with self.frame as a 3 digit number
         super().__init__(None, x, y, self.pic.width(), self.pic.height(), None) # initialise width and height of image
 
         self.angle = np.radians(angle)
 
     def _draw(self):
-        # stores the specific frame for specific angle the missile is fired at. this will be used to generte the missile animation
-        # cycles through 5 frames at a speed of 1 frame every 10 sec
+        # stores the specific frame for specific angle the missile is fired at. this will be used to generate the
+        # missile animation cycles through 5 frames at a speed of 1 frame every 10 sec
+
         self.pic = Picture(self.file + "/frame_{frame:03d}.png".format(frame=(self.frame % 50) // 10))
         stddraw.picture(self.pic, self.x, self.y) # displays the frame
 
@@ -73,17 +74,14 @@ class MissileController:
         self.x -= math.sin(np.radians(self.angle)) * self.h / 2
         self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
 
-        self.file = ("assets/missile/angle_" + str(angle)) # assigns self.file the directory path for the specific angle missile is to be fired at
+        self.file = ("assets/missile/angle_" + str(angle)) # assigns self.file the directory path for the specific
+        # angle missile is to be fired at
 
-        # missile is added to array
-        # once 1000 missile positions are stored in the array, self.num_missiles increments from zero again and overwrites old missile x,y with new missile positions
-        self.missile[self.num_missiles % 1000] = Missile(self.file, self.x, self.y, self.angle)
-        self.missile[self.num_missiles % 1000].allow_draw = True # flags that missile can be drawn/visible
-        self.num_missiles += 1 # increments self.num_missiles each time new missile fired
-        #missile is added to array
+        # missile is added to array once 1000 missile positions are stored in the array, self.num_missiles increments
+        # from zero again and overwrites old missile x,y with new missile positions
         self.missile[self.num_missiles % self.missile_count] = Missile(self.file, self.x, self.y, self.angle) #replaces old moissiles with new missile positions
-        self.missile[self.num_missiles % self.missile_count].allow_draw = True
-        self.num_missiles += 1
+        self.missile[self.num_missiles % self.missile_count].allow_draw = True # flags that missile can be drawn/visible
+        self.num_missiles += 1 # increments self.num_missiles each time new missile fired
 
     def sequence(self):
         for i in range(self.num_missiles):
@@ -103,16 +101,18 @@ class MissileController:
             self.missile[i].draw()
 
             # moves missile at the stipulated angle
-            self.missile[i].x += 10 * np.sin(-self.angle) # update y pos trajcectory based on the given angle
-            self.missile[i].y += 10 * np.cos(self.angle)  # update x pos trajectroy based on the angle
+            self.missile[i].x += 10 * np.sin(-self.angle) # update y pos trajectory based on the given angle
+            self.missile[i].y += 10 * np.cos(self.angle)  # update x pos trajectory based on the angle
 
 class Shield(GameObject):
     def __init__(self):
         self.file = "assets/shield_resized.png"
         self.pic = Picture(self.file) # stores image path
-        super().__init__(None, 0, 0, self.pic.width(), self.pic.height()) # stores the image in self.pic which will be used to initialise the heigth and width of the image
+        super().__init__(None, 0, 0, self.pic.width(), self.pic.height()) # stores the image in self.pic which will
+        # be used to initialise the heigth and width of the image
 
-    def visibility(self):  # ensures next time press key, self.sheild_active flag inverts. so if shield active, pressing key again with set the flag to false
+    def visibility(self):  # ensures next time press key, self.sheild_active flag inverts. so if shield active,
+        # pressing key again with set the flag to false
         if self.allow_draw:
             self.allow_draw = False
         else:
@@ -131,7 +131,9 @@ class AimController:
 
         self.length = 500 # length of line
 
-    def visibility(self): # ensures next time press key, self.aim_active flag inverts. so if shield active, pressing key again with set the flag to false
+    def visibility(self): # ensures next time press key, self.aim_active flag inverts. so if shield active, pressing
+        # key again with set the flag to false
+
         if self.aim_active:
             self.aim_active = False
         else :
@@ -143,12 +145,12 @@ class AimController:
         self.y_start = y
         self.angle = angle
 
-        # calcuates x and y positiob given angle of player
+        # calculates x and y position given angle of player
         self.x_end = x + self.length * math.cos(self.angle)
         self.y_end = y + self.length * math.sin(self.angle)
 
     def draw(self):
-        if not self.aim_active: # if sheild aim flag is false, line not drawn
+        if not self.aim_active: # if shield aim flag is false, line not drawn
             return False
         else:
             stddraw.setPenColor(stddraw.RED)

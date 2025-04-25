@@ -7,7 +7,7 @@ import stddraw
 
 from utils.utils import GameObject
 
-
+# Defines ground entity as single rectangle
 class Ground(GameObject):
     def __init__(self, x, y, width, height):
         super().__init__("Ground Level", x, y, width, height)

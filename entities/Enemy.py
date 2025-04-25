@@ -13,6 +13,7 @@ import GameSettings
 from utils.utils import GameObject
 
 
+# Base class for all enemies
 class ClassicEnemy(GameObject):
 
     CLASSIC_ENEMY = 0
@@ -27,12 +28,19 @@ class ClassicEnemy(GameObject):
 
         self.death_preview_frame = GameSettings.DEATH_FRAME_TIME
 
+        # Defines the type of the enemy
         self.enemy_type = self.CLASSIC_ENEMY
 
+        # All enemies can be frozen by the player, this is used for the freeze enemy
+        # and store frozen sprite
         self.frozen = False
         self.frozen_pic = Picture("assets/enemy/frozen-enemy.png")
 
     def _draw(self):
+        # Draws the enemy
+
+        # Determines if enemy is within death preview frame
+        # The enemy will be drawn with the death animation and until the death preview frame is 0
 
         if self.death_preview_frame > 1 and not self.is_alive:
             self.death_preview_frame -= 1
@@ -41,6 +49,7 @@ class ClassicEnemy(GameObject):
 
         p = self.p
 
+        # If the enemy is frozen, draw the frozen sprite and if within death preview frame draw the death animation
         if not self.is_alive:
             p = Picture("assets/enemy/explosion/frame_{frame}.png".format(frame=12 - self.death_preview_frame))
         elif self.frozen:
@@ -49,6 +58,8 @@ class ClassicEnemy(GameObject):
         stddraw.picture(p, self.x, self.y, self.width, self.height)
 
     def kill_enemy(self):
+        # Kills the enemy and triggers the death animation
+
         self.is_alive = False
         self.is_destroyed = True
 
@@ -70,7 +81,7 @@ class BombEnemy(ClassicEnemy):
         if random.randint(0, GameSettings.CHANCE_OF_ENEMY_DROPPING_BOMB) == 0 and self.is_alive:
             return True
 
-class EnemyDrops(GameObject):
+class EnemyBomb(GameObject):
 
     def __init__(self, name, x, y):
 
@@ -108,9 +119,13 @@ class EnemyController:
     LEFT = 1
 
     def __init__(self, w, h, enemy_count=36, wave=1):
+
+        # Initializes the enemy controller and all attributes
+
         self.w = w
         self.h = h
 
+        # Multiplies the number of enemies by the wave
         enemy_count = enemy_count * wave
         self.enemy_count = enemy_count
 
@@ -133,10 +148,13 @@ class EnemyController:
         start_y = self.h - self.enemy_height
 
         self.enemy_list = []
+        self.break_list = []
+        self.drop_list = []
 
         for i in range(0, enemy_count):
             x, y = self.enemy_position_striped(i, start_x, start_y)
 
+            # Adds the enemy to the list and place bomber every 36th enemy
             if i % 36 > 0:
                 self.enemy_list.append(ClassicEnemy(
                     "enemy",
@@ -148,7 +166,7 @@ class EnemyController:
                 )
             else:
                 self.enemy_list.append(BombEnemy(
-                    "enemy",
+                    "bomb enemy",
                     x,
                     y,
                     self.enemy_width,
@@ -156,10 +174,8 @@ class EnemyController:
                     p)
                 )
 
-        self.break_list = []
-        self.drop_list = []
-
     def get_alive_enemies(self, include_breaks=True):
+        # Get all alive enemies and excepts the breakaways if flagged
 
         if not include_breaks:
             return [enemy for enemy in self.enemy_list if enemy.is_alive]
@@ -170,12 +186,13 @@ class EnemyController:
         return [drop for drop in self.drop_list if drop.is_alive]
 
     def enemy_position_default(self, i, start_x, start_y):
+        # Determines the position of the enemy in a pattern
 
         return (start_x + (i % self.max_per_row) * (10 + self.enemy_width) + (50 if (i % self.max_per_row) > 7 else 0),
                 start_y - (i // self.max_per_row) * (10 + self.enemy_height))
 
     def enemy_position_striped(self, i, start_x, start_y):
-        repeat = 36
+        # Determines the position of the enemy in a pattern
 
         x = self.w - start_x * 2
 
@@ -225,6 +242,8 @@ class EnemyController:
                 enemy.x -= GameSettings.alien_speed_x
 
         # Checks if any enemy is at boundary, then change direction and move down
+        # Trigger move down if any enemy is at boundary
+
         for enemy in self.get_alive_enemies(False):
 
             if enemy.x >= self.w - self.enemy_width:
@@ -242,11 +261,12 @@ class EnemyController:
             if len(self.get_alive_enemies()) > 0:
                 self.break_list.append(self.enemy_list.pop(random.randint(0, len(self.enemy_list) - 1)))
 
+        # Move enemies down if flag received
         if move_down:
             for enemy in self.enemy_list:
                 enemy.y -= GameSettings.alien_speed_y
 
-    def render_breaks(self, shooter_x, shooter_y):
+    def step_breakaway(self, shooter_x, shooter_y):
         # Update the positions of all the breakaway enemies
 
         if self.frozen:
@@ -261,12 +281,17 @@ class EnemyController:
         for enemy in self.enemy_list:
             drop = enemy.draw(self.frozen)
 
-            if drop:
-                self.drop_list.append(EnemyDrops("drop", enemy.x, enemy.y))
+            # A bomb enemy can return True if it dropped a bomb
+            # Add a new bomb to the drop list
 
+            if drop:
+                self.drop_list.append(EnemyBomb("drop", enemy.x, enemy.y))
+
+        # Draw all the drops
         for drop in self.drop_list:
             drop.draw()
 
+        # Draw all the breakaway enemies
         for enemy in self.break_list:
             enemy.draw(self.frozen)
             
