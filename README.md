@@ -42,5 +42,6 @@
 
 ### ChatGPT Prompts
 | Student Name                          | Chat Link                                                   
-| ------------------------------------ | ------------------------------------------------------ 
-| Samkelo Nkabinde                     | https://chatgpt.com/share/680b435d-3a18-8004-bdaf-5d9574922af5                  
+| ------------------------------------  | ------------------------------------------------------ 
+| Samkelo Nkabinde                      | https://chatgpt.com/share/680b435d-3a18-8004-bdaf-5d9574922af5       
+| Meezaan Ryklief                       | https://chatgpt.com/share/680b45a0-3cb8-800e-8d29-ac97d19d24b0
