@@ -29,7 +29,7 @@ class Shooter(GameObject):
         self._y = 0.9 * self.screen_height
 
         self.x = self._x + self.get_width() / 2
-        self.y = self._y + self.get_height()
+        self.y = self._y + self.get_height() / 2
 
         self._speed = GameSettings.player_speed
         self._delta_angle = GameSettings.player_angle_change
@@ -62,7 +62,7 @@ class Shooter(GameObject):
             self._x -= self._speed
 
         self.x = self._x + self.get_width() / 2
-        self.y = self._y + self.get_height()
+        self.y = self._y + self.get_height() / 2
 
     def moveRight(self):
          # Moves shooter right and ensures it does not move beyond boundary 
@@ -71,8 +71,9 @@ class Shooter(GameObject):
         if self._x + (self._width) >= self.screen_width:
             self._x -= self._speed
 
+
         self.x = self._x + self.get_width() / 2
-        self.y = self._y + self.get_height()
+        self.y = self._y + self.get_height() / 2
         
     # Rotation Methods
     def anticlockwise(self):

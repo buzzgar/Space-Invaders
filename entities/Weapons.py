@@ -53,7 +53,7 @@ class MissileController:
 
         # centres the starting x and y positions of the missile to the centre of shooter
         self.x -= math.sin(np.radians(self.angle)) * self.h / 2
-        self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
+        self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2) - self.h/2
 
         self.file = ("assets/missile/angle_" + str(angle)) # assigns self.file the directory path for the specific
         # angle missile is to be fired at
