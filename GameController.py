@@ -157,7 +157,7 @@ class Game:
         self.is_player_dead = False
         self.help = False
 
-        self.enemy_controller = EnemyController(self.w, self.h, wave=4)
+        self.enemy_controller = EnemyController(self.w, self.h, wave=GameSettings.waves)
         self.ground_level = Ground(0, 0, self.w, 40)
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
         self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
@@ -213,11 +213,6 @@ class Game:
                     case 'x' | 'X':
                         quit()
 
-        centered_x, centered_y, angle = self.shooter.get_x(), self.shooter.get_y(), self.shooter.get_angle() + math.pi / 2
-
-        self.aim_controller.generate(centered_x, centered_y, angle)
-        self.shield_controller.update_pos(centered_x, centered_y)
-
         # Move and rotate shooter based off state
         if self.moving_direction == self.MOVING_LEFT:
             self.shooter.moveLeft()
@@ -230,6 +225,11 @@ class Game:
 
         elif self.rotating_direction == self.ROTATION_CLOCKWISE:
             self.shooter.clockwise()
+
+        centered_x, centered_y, angle = self.shooter.get_x(), self.shooter.get_y(), self.shooter.get_angle() + math.pi / 2
+
+        self.aim_controller.generate(centered_x, centered_y, angle)
+        self.shield_controller.update_pos(centered_x, centered_y)
 
         # Checking if space is pressed/key down so that there is continuous fire
         if stddraw.getKeysPressed()[stddraw.K_SPACE]:

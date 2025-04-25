@@ -51,11 +51,6 @@ class MissileController:
         self.file = file # stores image path
         self.h = player_height
 
-        self.missile = stdarray.create1D(1000) # array to trajactory od each new missilie fired
-        self.num_missiles = 0 # incerments when new missile fired
-        self.file = file
-        self.h = player_height
-
         self.missile_count = 100
 
         # array to store missiles
@@ -117,9 +112,11 @@ class Shield(GameObject):
             self.allow_draw = True
 
         return self.allow_draw
+
     def update_pos(self, x, y):
         self.x = x
         self.y = y
+
     def _draw(self):
         stddraw.picture(self.pic, self.x, self.y) # dispalys sheild image
 
