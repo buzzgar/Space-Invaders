@@ -288,19 +288,24 @@ class Game:
             if i - hit > GameSettings.hit_point_frame_time:
                 continue
 
+            # Display hitpoints
             stddraw.setPenColor(stddraw.RED)
             stddraw.text(self.hit_points[hit][0], self.hit_points[hit][1], "+1")
 
         # Check for collisions
+
+        # Check for collisions with player and modifiers
         for modifier in self.modifier_controller.get_modifiers():
 
             if collides(modifier, self.shooter):
                 modifier.pick_up(i)
 
+        # Check for collisions with (player, missiles, shield, ground) and bombs/drops
         for drop in self.enemy_controller.get_active_drops():
 
             for missile in self.missile_controller.missile:
 
+                # Ignore missiles that have already been destroyed or are null
                 if not missile:
                     continue
 
@@ -338,7 +343,11 @@ class Game:
 
                     self.sound_player.play_audio_background("assets/sounds/shield_guard_sound")  #from pixabay.com
 
+        # Check for collisions with (player, missiles, shield, ground) and enemies
         for enemy in self.enemy_controller.get_alive_enemies():
+
+            # Ignore enemies that have already been destroyed
+
             if not enemy.allow_draw:
                 continue
 
@@ -371,7 +380,7 @@ class Game:
                     self.enemies_destroyed += 1
                     self.target_hit_count += 1
 
-                    self.hit_points[i] = (enemy.x, enemy.y)
+                    self.hit_points[i] = (enemy.x, enemy.y) # add hit point due to missile-enemy collision
 
                     self.sound_player.play_audio_background("assets/sounds/explosion-2")
 
