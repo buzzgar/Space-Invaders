@@ -34,8 +34,7 @@ class Missile(GameObject):
         self.frame += 1 # increments self.frame so that animation changes to next frame next time _draw function is called
 
 class MissileController:
-    def __init__(self, file, player_height, screen_width, screen_height):
-        self.file = file # stores image path
+    def __init__(self, player_height, screen_width, screen_height):
         self.h = player_height
 
         self.missile_count = 100
@@ -54,7 +53,7 @@ class MissileController:
 
         # centres the starting x and y positions of the missile to the centre of shooter
         self.x -= math.sin(np.radians(self.angle)) * self.h / 2
-        self.y -= (math.cos(np.radians(self.angle)) * self.h / 2)
+        self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
 
         self.file = ("assets/missile/angle_" + str(angle)) # assigns self.file the directory path for the specific
         # angle missile is to be fired at

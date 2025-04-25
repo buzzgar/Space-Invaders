@@ -160,7 +160,7 @@ class Game:
         self.enemy_controller = EnemyController(self.w, self.h, wave=GameSettings.waves)
         self.ground_level = Ground(0, 0, self.w, 40)
         self.shooter = Shooter("", 0, 0, self.w, 40, None, playerFile=GameSettings.player_sprite_path, scaleFactor=40)
-        self.missile_controller = MissileController(None, self.shooter.get_height(), self.w, self.h)
+        self.missile_controller = MissileController(self.shooter.get_height(), self.w, self.h)
         self.modifier_controller = ModifierController(self.w, self.h)
         self.shield_controller = Shield()
         self.aim_controller = AimController()
