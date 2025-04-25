@@ -12,19 +12,6 @@ from utils.PictureLoader import Picture
 
 from utils.utils import GameObject
 
-
-#from Gif import setup, draw_frames
-class Canvas:
-    def __init__(self, width, height):
-        self.w = width
-        self.h = height
-
-    def setup(self):
-        stddraw.setCanvasSize(700, 700)
-        stddraw.clear(stddraw.GRAY)
-        stddraw.setXscale(0.0, self.w)
-        stddraw.setYscale(0.0, self.w)
-
 class Missile(GameObject):
     def __init__(self, file, x, y, angle):
 
@@ -67,7 +54,7 @@ class MissileController:
 
         # centres the starting x and y positions of the missile to the centre of shooter
         self.x -= math.sin(np.radians(self.angle)) * self.h / 2
-        self.y -= self.h / 2 - (math.cos(np.radians(self.angle)) * self.h / 2)
+        self.y -= (math.cos(np.radians(self.angle)) * self.h / 2)
 
         self.file = ("assets/missile/angle_" + str(angle)) # assigns self.file the directory path for the specific
         # angle missile is to be fired at
